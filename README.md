@@ -1,3 +1,3 @@
-go-footballpool
+mikesnflpool
 ===============
 Testing deployment.
