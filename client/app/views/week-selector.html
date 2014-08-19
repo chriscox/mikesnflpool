@@ -1,0 +1,21 @@
+<div id="week-selector">
+  <!-- Hidden when small -->
+  <div class="pull-left hidden-xs">
+    <ul class="pagination pagination-sm">
+      <li class="disabled"><a href="">Select Week:</a></li>
+      <li ng-repeat="n in [] | range:17" ng-class="{active: $index==pool.week-1}" ng-click="pool.setWeek($index+1)">
+        <a>{{$index+1}}</a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Visible when small -->
+  <div class="btn-group pull-left visible-xs">
+    <button type="button" class="btn btn-default btn-small btn-primary dropdown-toggle" data-toggle="dropdown">
+      Week {{pool.week}} <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li ng-repeat="n in [] | range:17" ng-click="pool.setWeek($index+1)"><a href="">Week {{$index+1}}</a></li>
+    </ul>
+  </div>
+</div>

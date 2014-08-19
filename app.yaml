@@ -1,0 +1,61 @@
+application: mikesnflpool
+version: 1
+runtime: go
+api_version: go1
+
+handlers:
+- url: /api/.*
+  script: _go_app
+
+# Dist URLs
+
+- url: /bower_components/*
+  static_dir: client/dist/bower_components
+
+- url: /images/*
+  static_dir: client/dist/images
+
+- url: /scripts/*
+  static_dir: client/dist/scripts
+
+- url: /styles/*
+  static_dir: client/dist/styles
+
+- url: /views/*
+  static_dir: client/dist/views
+
+- url: /.*
+  static_files: client/dist/index.html
+  upload: client/dist/index.html
+
+# Debug URLs
+
+# - url: /bower_components/*
+#   static_dir: client/bower_components
+
+# - url: /images/*
+#   static_dir: client/app/images
+
+# - url: /scripts/*
+#   static_dir: client/app/scripts
+
+# - url: /styles/*
+#   static_dir: client/app/styles
+
+# - url: /views/*
+#   static_dir: client/app/views
+
+# - url: /.*
+#   static_files: client/app/index.html
+#   upload: .*/client/app/index.html
+
+skip_files:
+  # - ^(.*/)?#.*#
+  # - ^(.*/)?.*~
+  # - ^(.*/)?.*\.py[co]
+  # - ^(.*/)?.*/RCS/.*
+  # - ^(.*/)?\..*
+  - (client/node_modules/.*)
+  - (client/test/.*)
+  - (client/app/.*)
+  - (client/bower_components/.*)

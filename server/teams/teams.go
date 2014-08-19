@@ -2,13 +2,20 @@ package teams
 
 import (
   // "fmt"
+  // "encoding/json"
   "net/http"
   "html/template"
   "time"
+  // "io/ioutil"
+  // "github.com/routes"
 
   "appengine"
   "appengine/datastore"
   "appengine/user"
+
+  "server/utils"
+
+  // "github.com/go-martini/martini"
 )
 
 type Team struct {
@@ -39,26 +46,32 @@ func ConferenceHandler(w http.ResponseWriter, r *http.Request) {
   }
 }
 
-func NewTeam(w http.ResponseWriter, r *http.Request) {
-        c := appengine.NewContext(r)
-        g := Greeting{
-                Content: r.FormValue("content"),
-                Date:    time.Now(),
-        }
-        if u := user.Current(c); u != nil {
-                g.Author = u.String()
-        }
-        // We set the same parent key on every Greeting entity to ensure each Greeting
-        // is in the same entity group. Queries across the single entity group
-        // will be consistent. However, the write rate to a single entity group
-        // should be limited to ~1/second.
-        key := datastore.NewIncompleteKey(c, "Greeting", guestbookKey(c))
-        _, err := datastore.Put(c, key, &g)
-        if err != nil {
-                http.Error(w, err.Error(), http.StatusInternalServerError)
-                return
-        }
-        http.Redirect(w, r, "/", http.StatusFound)
+// guestbookKey returns the key used for all guestbook entries.
+// func teamKey(c appengine.Context) *datastore.Key {
+//         // The string "default_guestbook" here could be varied to have multiple guestbooks.
+//         return datastore.NewKey(c, "Team", "default_team", 0, nil)
+// }
+
+// type test_struct struct {
+//     Name string
+//     NickName string
+// }
+
+
+func AddTeamHandler(w http.ResponseWriter, r *http.Request) {
+  c := appengine.NewContext(r)
+  var t Team
+  if err := utils.ReadJson(r, &t); err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+
+  key := datastore.NewKey(c, "Team", t.Name, 0, nil)
+  if _, err := datastore.Put(c, key, &t); err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+  utils.ServeJson(w, &t)
 }
 
 func TeamHandler(w http.ResponseWriter, r *http.Request) {
@@ -69,9 +82,17 @@ func TeamHandler(w http.ResponseWriter, r *http.Request) {
     http.Error(w, err.Error(), http.StatusInternalServerError)
     return
   }
-  if err := teamTemplate.Execute(w, teams); err != nil {
-    http.Error(w, err.Error(), http.StatusInternalServerError)
-  }
+  utils.ServeJson(w, &teams)
+  // w.Write([]byte("Hello"))
+  // routes.ServeJson(w, &teams)
+  // w.WriteJson(&teams)
+  // gorca.WriteJSON(c, w, r, teams)
+  // if err := teamTemplate.Execute(w, teams); err != nil {
+  //   http.Error(w, err.Error(), http.StatusInternalServerError)
+  // }
+  // if err := teamTemplate.Execute(w, teams); err != nil {
+  //   http.Error(w, err.Error(), http.StatusInternalServerError)
+  // }
 }
 
 var conferenceTemplate = template.Must(template.New("conference").Parse(`
@@ -92,7 +113,7 @@ var teamTemplate = template.Must(template.New("team").Parse(`
   </head>
   <body>
     {{range .}}
-      {{.name}}
+      <div>{{.Name}}</div>
     {{end}}
   </body>
 </html>

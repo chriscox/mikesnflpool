@@ -1,0 +1,42 @@
+<div id="admin-teams">
+
+  <div class="page-header">
+    <h3>Admin Teams</h3>
+  </div>
+
+   <div class="well">
+    <form ng-submit="addTeam()" class="form-inline" role="form">
+
+      <fieldset>
+        <legend>Add Team</legend>
+        <input type="text" ng-model="newTeam.Name">
+        <input type="text" ng-model="newTeam.NickName">
+        <button type="submit" class="btn btn-primary btn-sm">Add Game</button>
+      </fieldset>
+    </form>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table  table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Team Name</th>
+          <th>Abbreviation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="team in teams">
+          <td>{{$index + 1}}</td>
+          <td>
+            <div>{{team.Name}}</div>
+          </td>
+          <td>
+            <div>{{team.NickName}}</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
