@@ -1,0 +1,55 @@
+'use strict';
+
+/**
+ * @ngdoc directive
+ * @name clientApp.directive:navbar
+ * @description
+ * # navbar
+ */
+angular.module('clientApp')
+  .directive('navbar', function (dataService) {
+    return {
+      templateUrl: 'views/navbar.html',
+      restrict: 'AE',
+      replace: true,
+      link: function postLink(scope, element, attrs) {
+
+        // scope.navItems = [
+        //   {title:'Rules', url:'/rules'},
+        //   {title:'Make Picks', url:'/make-picks'},
+        //   {title:'Player Picks', url:'/player-picks'},
+        //   {title:'Leaderboard', url:'leaderboard'},
+        //   {title:'Team Stats', url:'team-stats'},
+        //   {title:'Player Stats', url:'player-stats'},
+        //   {title:'Log In', url:'login'},
+        // ];
+
+        // initial state
+        scope.user = dataService.authenticatedUser();
+
+        // watch route to determine active nav
+        scope.$watch(function() {
+          return dataService.getActiveRoute();
+        }, function(newValue, oldValue) { 
+          // toggle navbar mobile selector
+          if (angular.element('.navbar-collapse').hasClass('in')) {
+            angular.element('.navbar-toggle').click();
+          }
+          scope.route = newValue;
+        });
+
+        scope.logout = function() {
+          dataService.logout();
+        };
+
+        // listen for login/logout authenticated broadcast
+        scope.$on('isAuthenticated', function(event, authenticated) {
+          if (authenticated) {
+            scope.user = dataService.authenticatedUser();
+          } else {
+            scope.user = null;
+          }
+        });
+      }
+    };
+  });

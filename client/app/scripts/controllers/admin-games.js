@@ -47,6 +47,6 @@ angular.module('clientApp')
       });
     };
 
-    // $scope.getTeams();
-    // $scope.getGames();
+    $scope.getTeams();
+    $scope.getGames();
   });

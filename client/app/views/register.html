@@ -1,0 +1,44 @@
+<div id="signup">
+  <div class="page-header">
+    <h3>Register to Play</h3>
+  </div>
+
+  <div class="well well-lg col-sm-7">
+
+    <!-- Closed Registration -->
+    <div ng-show="closed" class="alert alert-info">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>Sorry!</strong> Registration is now closed for this season.
+    </div>
+
+    <!-- Error -->
+    <div ng-show="hasError()" class="alert alert-danger">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>Oops!</strong> <span ng-bind="errorText"></span></div>
+
+    <!-- Success -->
+    <div ng-show="hasSuccess" class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>Success!</strong> You are now ready to play.  Good Luck!
+    </div>
+
+    <form ng-hide="hasSuccess" class="form-horizontal" role="form" ng-submit="register()">
+
+      <div ng-repeat="field in user.fields" class="form-group" ng-class="{'has-error' : field.hasError}">
+        <input type="{{field.type}}" class="form-control" id="{{field.id}}"  placeholder="{{field.name}}" ng-model='field.value' required ng-disabled="closed">
+      </div>
+
+      <div class="form-group">
+        <div class="checkbox">
+          <label><input type="checkbox" ng-model="remember" ng-disabled="closed"> Remember me</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="">
+          <button type="submit" class="btn btn-primary btn-block" ng-disabled="closed">Submit Registration</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>

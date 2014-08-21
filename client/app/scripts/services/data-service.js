@@ -104,6 +104,7 @@ angular.module('clientApp')
         week = (_currentWeek !== _activeWeek) ? _activeWeek : _currentWeek;
         setRouteParam({week:week});
       }
+      week = parseInt(week);
       _activeWeek = week;
       return week;
     };
@@ -268,13 +269,10 @@ angular.module('clientApp')
 
     var addTeam = function(team, callback) {
       Restangular.all('teams').post({
-        Name: team.Name,
-        NickName: team.NickName
+        name: team.name,
+        abbr: team.abbr
       }).then(function(team) {
-        console.log(team);
         callback(team);
-      }, function(error) {
-        console.log(error);
       });
     };
 
@@ -305,13 +303,15 @@ angular.module('clientApp')
 
     var addGame = function(game, callback) {
       Restangular.all('games').post({
-        season: getActiveSeason(),
-        week: getActiveWeek(),
+        Season: getActiveSeason(),
+        Week: getActiveWeek(),
         date: game.date,
-        homeTeam: game.homeTeam,
-        awayTeam: game.awayTeam,
+        // homeTeam: game.homeTeam,
+        // awayTeam: game.awayTeam,
       }).then(function(game) {
         callback(game);
+      }, function(error) {
+        console.log(error);
       });
     };
 

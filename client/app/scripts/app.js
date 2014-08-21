@@ -16,9 +16,13 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'ui.select2',
+    'ui.bootstrap.datetimepicker',
+    'ui.bootstrap',
+    'Satellizer'
   ])
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider, $authProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -27,6 +31,14 @@ angular
       .when('/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
+      })
+      .when('/register', {
+        templateUrl: 'views/register.html',
+        controller: 'RegisterCtrl'
+      })
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
       })
       // admin
       .when('/admin/games', {
@@ -43,18 +55,32 @@ angular
         redirectTo: '/'
       });
 
+    // Satellizer config.
+    // if ($location.host() === 'localhost') {
+      // $authProvider.logoutRedirect = '/';
+      // $authProvider.loginRedirect = '/';
+      $authProvider.config.loginUrl = 'http://localhost:8080/api/auth/login';
+      $authProvider.config.signupUrl = 'http://localhost:8080/api/auth/register';
+      // $authProvider.signupRedirect = '/login';
+      // $authProvider.loginRoute = '/login';
+      // $authProvider.signupRoute = '/register';
+      // $authProvider.user = 'currentUser';
+    // } else {
+      // $authProvider.logoutRedirect = '/';
+      // $authProvider.loginRedirect = '/';
+      // $authProvider.config.loginUrl = '/api/auth/login';
+      // $authProvider.config.signupUrl = '/api/auth/register';
+      // $authProvider.signupRedirect = '/login';
+      // $authProvider.loginRoute = '/login';
+      // $authProvider.signupRoute = '/register';
+      // $authProvider.user = 'currentUser';
+    // }
+
   }).run(function(Restangular, $location) {
+    // Restangular config
     if ($location.host() === 'localhost') {
-      // Set to local play server
       Restangular.setBaseUrl('http://localhost:8080/api');
     } else {
-      // For dist
       Restangular.setBaseUrl('/api');
     }
-    // Restangular.setRequestSuffix('.json');
-    // Restangular.setRestangularFields({
-    //   id: "_id",
-    //   route: "restangularRoute",
-    //   selfLink: "self.href"
-    // });
   });

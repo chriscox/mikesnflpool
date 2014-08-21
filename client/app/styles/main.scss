@@ -3,90 +3,125 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap.scss";
 // endbower
 
-.browsehappy {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
+$redColor: #b94a48;
+$greenColor: #468847;
+$blueColor: #3a87ad;
+$orangeColor: #f89406;
+
+/*-- Bootstrap --*/
+
+/*.navbar-inverse .navbar-nav > li > a {
+  color: #f1f1f1;
 }
 
-/* Space out content a bit */
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus {
+  background-color: #3F3F3F;
+}*/
+
+/*-- Main --*/
+
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  background: url('/images/background.jpeg') no-repeat center center fixed;
+  padding-top: 50px;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
-/* Everything but the jumbotron gets side spacing for mobile first views */
-.header,
-.marketing,
-.footer {
-  padding-left: 15px;
-  padding-right: 15px;
+.container { background-color: #FFF }
+
+.badge-success { background-color:$greenColor; }
+.badge-important { background-color: $redColor; }
+.badge-info { background-color: $blueColor; }
+
+#week-selector .btn-group { margin:20px 0;}
+
+#make-picks, #admin-userpicks {
+  td { vertical-align: middle; }
+  .game-index.locked { background: url('/images/lock-icon.png') no-repeat right center; }
+  .team-icon { border-right: none;}
+  .team-cell { border-right: none; border-left:none; }
+  .team-spread { border-right: none; border-left: none; color:$redColor; min-width:40px; }
+  .team-selector { width:70px; border-left:none; }
 }
 
-/* Custom page header */
-.header {
-  border-bottom: 1px solid #e5e5e5;
+#user-picks {
+  .winner { color:red;}
+}
 
-  /* Make the masthead heading the same height as the navigation */
-  h3 {
-    margin-top: 0;
-    margin-bottom: 0;
-    line-height: 40px;
-    padding-bottom: 19px;
+#admin-games {
+  td { height: 30px; line-height: 30px; }
+  .editable-input { width:60px; }
+  .editable-input input { width:40px; margin:0;}
+
+  /*.team-icon { padding-left:30px; height: 30px; background: url('/images/teams-small.png') no-repeat left 0; }*/
+}
+
+#team-stats {
+  svg text:last-child tspan:last-child { display:none;}
+  h3 { line-height: 50px; }
+  .page-header span { margin-right:10px; }
+  .team-info {
+    .team-icon-large { float: left; padding-right: 15px; }
   }
+  td a { white-space: nowrap; display:inline-block; height: 20px;}
+  .team-status { font-weight: bold; width:30px;}
 }
 
-/* Custom page footer */
-.footer {
-  padding-top: 19px;
-  color: #777;
-  border-top: 1px solid #e5e5e5;
+#player-stats {
+  h3 { line-height: 50px; }
+  .charts svg { width:200px; height:150px; float:left; }
+  .charts svg text { font-size:11px; }
+  .charts .nv-legendWrap { width:100px;}
 }
 
-.container-narrow > hr {
-  margin: 30px 0;
+#quickpick { margin:20px 0;}
+
+#login {
+  .panel-info { padding:0;}
 }
 
-/* Main marketing message and sign up button */
-.jumbotron {
-  text-align: center;
-  border-bottom: 1px solid #e5e5e5;
+#leaderboard .tab-content { padding-top:20px;}
 
-  .btn {
-    font-size: 21px;
-    padding: 14px 24px;
-  }
-}
+/*-- team icons --*/
 
-/* Supporting marketing content */
-.marketing {
-  margin: 40px 0;
+$iconSize: -50px;
 
-  p + h4 {
-    margin-top: 28px;
-  }
-}
+.team-icon-large { width: 50px; height: 50px; float:left; background: url('/images/teams.png') no-repeat left 0;}
+.team-icon-small { width: 30px; height: 30px; float:left; background: url('/images/teams-small.png') no-repeat left 0; padding-left:30px;}
 
-/* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
-  .container {
-    max-width: 730px;
-  }
-
-  /* Remove the padding we set earlier */
-  .header,
-  .marketing,
-  .footer {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  /* Space out the masthead */
-  .header {
-    margin-bottom: 30px;
-  }
-  /* Remove the bottom border on the jumbotron for visual effect */
-  .jumbotron {
-    border-bottom: 0;
-  }
-}
+.team-Cardinals { background-position:0 $iconSize * 0 !important; }
+.team-Falcons   { background-position:0 $iconSize * 1 !important; }
+.team-Ravens    { background-position:0 $iconSize * 2 !important; }
+.team-Bills     { background-position:0 $iconSize * 3 !important; }
+.team-Panthers  { background-position:0 $iconSize * 4 !important; }
+.team-Bears     { background-position:0 $iconSize * 5 !important; }
+.team-Bengals   { background-position:0 $iconSize * 6 !important; }
+.team-Browns    { background-position:0 $iconSize * 7 !important; }
+.team-Cowboys   { background-position:0 $iconSize * 8 !important; }
+.team-Broncos   { background-position:0 $iconSize * 9 !important; }
+.team-Lions     { background-position:0 $iconSize * 10 !important; }
+.team-Packers   { background-position:0 $iconSize * 11 !important; }
+.team-Texans    { background-position:0 $iconSize * 12 !important; }
+.team-Colts     { background-position:0 $iconSize * 13 !important; }
+.team-Jaguars   { background-position:0 $iconSize * 14 !important; }
+.team-Chiefs    { background-position:0 $iconSize * 15 !important; }
+.team-Dolphins  { background-position:0 $iconSize * 16 !important; }
+.team-Vikings   { background-position:0 $iconSize * 17 !important; }
+.team-Patriots  { background-position:0 $iconSize * 18 !important; }
+.team-Saints    { background-position:0 $iconSize * 19 !important; }
+.team-Giants    { background-position:0 $iconSize * 20 !important; }
+.team-Jets      { background-position:0 $iconSize * 21 !important; }
+.team-Raiders   { background-position:0 $iconSize * 22 !important; }
+.team-Eagles    { background-position:0 $iconSize * 23 !important; } 
+.team-Steelers  { background-position:0 $iconSize * 24 !important; }
+.team-Chargers  { background-position:0 $iconSize * 25 !important; }
+.team-49ers     { background-position:0 $iconSize * 26 !important; }
+.team-Seahawks  { background-position:0 $iconSize * 27 !important; }
+.team-Rams      { background-position:0 $iconSize * 28 !important; }
+.team-Buccaneers{ background-position:0 $iconSize * 29 !important; }
+.team-Titans    { background-position:0 $iconSize * 30 !important; }
+.team-Redskins  { background-position:0 $iconSize * 31 !important; }

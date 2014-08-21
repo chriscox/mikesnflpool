@@ -9,8 +9,8 @@
 
       <fieldset>
         <legend>Add Team</legend>
-        <input type="text" ng-model="newTeam.Name">
-        <input type="text" ng-model="newTeam.NickName">
+        <input type="text" ng-model="newTeam.name">
+        <input type="text" ng-model="newTeam.abbr">
         <button type="submit" class="btn btn-primary btn-sm">Add Game</button>
       </fieldset>
     </form>
@@ -29,10 +29,10 @@
         <tr ng-repeat="team in teams">
           <td>{{$index + 1}}</td>
           <td>
-            <div>{{team.Name}}</div>
+            <div>{{team.name}}</div>
           </td>
           <td>
-            <div>{{team.NickName}}</div>
+            <div>{{team.abbr}}</div>
           </td>
         </tr>
       </tbody>

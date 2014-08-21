@@ -19,8 +19,8 @@ angular.module('clientApp')
     $scope.addTeam = function() {
       dataService.addTeam($scope.newTeam, function(team) {
         $scope.teams.push(team);
-        $scope.newTeam.Name = null;
-        $scope.newTeam.NickName = null;
+        $scope.newTeam.name = null;
+        $scope.newTeam.abbr = null;
       });
     };
 
