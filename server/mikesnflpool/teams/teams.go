@@ -4,13 +4,16 @@ import (
   "appengine"
   "appengine/datastore"
   "net/http"
-  "server/utils"
+  "server/mikesnflpool/utils"
 )
 
 type Team struct {
+  Abbr      string  `json:"abbr"`
   Name      string  `json:"name"`
-  NickName  string  `json:"abbr"`
+  NickName  string  `json:"nickName"`
+  Division  string  `json:"division"`
 }
+  
 
 func TeamHandler(w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
@@ -31,7 +34,7 @@ func AddTeamHandler(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  key := datastore.NewKey(c, "Team", t.Name, 0, nil)
+  key := datastore.NewKey(c, "Team", t.Abbr, 0, nil)
   if _, err := datastore.Put(c, key, &t); err != nil {
     http.Error(w, err.Error(), http.StatusInternalServerError)
     return

@@ -10,7 +10,6 @@
  */
 angular
   .module('clientApp', [
-    'restangular',
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -20,7 +19,9 @@ angular
     'ui.select2',
     'ui.bootstrap.datetimepicker',
     'ui.bootstrap',
-    'Satellizer'
+    'restangular',
+    // 'ui.router',
+    'ng-token-auth',
   ])
   .config(function ($routeProvider, $authProvider) {
     $routeProvider
@@ -55,25 +56,11 @@ angular
         redirectTo: '/'
       });
 
-    // Satellizer config.
+    // // ng-token-auth config.
     // if ($location.host() === 'localhost') {
-      // $authProvider.logoutRedirect = '/';
-      // $authProvider.loginRedirect = '/';
-      $authProvider.config.loginUrl = 'http://localhost:8080/api/auth/login';
-      $authProvider.config.signupUrl = 'http://localhost:8080/api/auth/register';
-      // $authProvider.signupRedirect = '/login';
-      // $authProvider.loginRoute = '/login';
-      // $authProvider.signupRoute = '/register';
-      // $authProvider.user = 'currentUser';
-    // } else {
-      // $authProvider.logoutRedirect = '/';
-      // $authProvider.loginRedirect = '/';
-      // $authProvider.config.loginUrl = '/api/auth/login';
-      // $authProvider.config.signupUrl = '/api/auth/register';
-      // $authProvider.signupRedirect = '/login';
-      // $authProvider.loginRoute = '/login';
-      // $authProvider.signupRoute = '/register';
-      // $authProvider.user = 'currentUser';
+      $authProvider.configure({
+        apiUrl: 'http://localhost:8080/api',
+      });
     // }
 
   }).run(function(Restangular, $location) {

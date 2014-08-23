@@ -28,6 +28,11 @@ handlers:
   static_files: client/dist/index.html
   upload: client/dist/index.html
 
+admin_console:
+  pages:
+  - name: Game Admin
+    url: /admin/games
+
 # Debug URLs
 
 # - url: /bower_components/*

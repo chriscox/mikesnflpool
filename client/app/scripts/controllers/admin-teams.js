@@ -16,11 +16,9 @@ angular.module('clientApp')
       });
     };
 
-    $scope.addTeam = function() {
-      dataService.addTeam($scope.newTeam, function(team) {
-        $scope.teams.push(team);
-        $scope.newTeam.name = null;
-        $scope.newTeam.abbr = null;
+    $scope.addTeams = function() {
+      dataService.addTeams(function(teams) {
+        $scope.teams = teams;
       });
     };
 

@@ -4,25 +4,24 @@ import (
   "appengine"
   "appengine/datastore"
   "net/http"
-  "server/utils"
+  "server/mikesnflpool/utils"
 )
 
 type TestUser struct {
-  email  string
-  password string
+  Email     string    `json:"email"`
+  Password  string    `json:"password"`
 }
 
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
   var t TestUser
   if err := utils.ReadJson(r, &t); err != nil {
-    http.Error(w, err.Error(), http.StatusInternalServerError)
-    return
+    panic(err.Error)
   }
+  c.Infof("%v", t)
   key := datastore.NewIncompleteKey(c, "TestUser", nil)
   if _, err := datastore.Put(c, key, &t); err != nil {
-    http.Error(w, err.Error(), http.StatusInternalServerError)
-    return
+    panic(err.Error)
   }
   utils.ServeJson(w, &t)
 }

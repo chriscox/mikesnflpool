@@ -1,17 +1,13 @@
 <div id="admin-teams">
 
   <div class="page-header">
-    <h3>Admin Teams</h3>
+    <h3>Admin: Teams</h3>
   </div>
 
    <div class="well">
-    <form ng-submit="addTeam()" class="form-inline" role="form">
-
+    <form ng-submit="addTeams()" class="form-inline" role="form">
       <fieldset>
-        <legend>Add Team</legend>
-        <input type="text" ng-model="newTeam.name">
-        <input type="text" ng-model="newTeam.abbr">
-        <button type="submit" class="btn btn-primary btn-sm">Add Game</button>
+        <button type="submit" class="btn btn-primary btn-sm">Upload Teams</button>
       </fieldset>
     </form>
   </div>
@@ -21,19 +17,19 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>Team Name</th>
           <th>Abbreviation</th>
+          <th>Team Name</th>
+          <th>Nick Name</th>
+          <th>Division</th>
         </tr>
       </thead>
       <tbody>
         <tr ng-repeat="team in teams">
-          <td>{{$index + 1}}</td>
-          <td>
-            <div>{{team.name}}</div>
-          </td>
-          <td>
-            <div>{{team.abbr}}</div>
-          </td>
+          <td><div>{{$index + 1}}</div></td>
+          <td><div>{{team.abbr}}</div></td>
+          <td><div>{{team.name}}</div></td>
+          <td><div>{{team.nickName}}</div></td>
+          <td><div>{{team.division}}</div></td>
         </tr>
       </tbody>
     </table>

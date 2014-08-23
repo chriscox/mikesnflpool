@@ -1,0 +1,240 @@
+{
+    "conferences": [
+        {
+            "id": "NFC",
+            "name": "National Football Conference"
+        },
+        {
+            "id": "AFC",
+            "name": "American Football Conference"
+        }
+    ],
+    "divisions": [
+        {
+            "id": "NFC-North",
+            "conference": "NFC"
+        },
+        {
+            "id": "NFC-South",
+            "conference": "NFC"
+        },
+        {
+            "id": "NFC-East",
+            "conference": "NFC"
+        },
+        {
+            "id": "NFC-West",
+            "conference": "NFC"
+        },
+        {
+            "id": "AFC-North",
+            "conference": "AFC"
+        },
+        {
+            "id": "AFC-South",
+            "conference": "AFC"
+        },
+        {
+            "id": "AFC-East",
+            "conference": "AFC"
+        },
+        {
+            "id": "AFC-West",
+            "conference": "AFC"
+        }
+    ],
+    "teams": [
+        {
+            "abbr": "AZ",
+            "name": "Arizona Cardinals",
+            "nickName": "Cardinals",
+            "division": "NFC-West"
+        },
+        {
+            "abbr": "ATL",
+            "name": "Atlanta Falcons",
+            "nickName": "Falcons",
+            "division": "NFC-South"
+        },
+        {
+            "abbr": "BAL",
+            "name": "Baltimore Ravens",
+            "nickName": "Ravens",
+            "division": "AFC-North"
+        },
+        {
+            "abbr": "BUF",
+            "name": "Buffalo Bills",
+            "nickName": "Bills",
+            "division": "AFC-East"
+        },
+        {
+            "abbr": "CAR",
+            "name": "Carolina Panthers",
+            "nickName": "Panthers",
+            "division": "NFC-South"
+        },
+        {
+            "abbr": "CHI",
+            "name": "Chicago Bears",
+            "nickName": "Bears",
+            "division": "NFC-North"
+        },
+        {
+            "abbr": "CIN",
+            "name": "Cincinnati Bengals",
+            "nickName": "Bengals",
+            "division": "AFC-North"
+        },
+        {
+            "abbr": "CLE",
+            "name": "Cleveland Browns",
+            "nickName": "Browns",
+            "division": "AFC-North"
+        },
+        {
+            "abbr": "DAL",
+            "name": "Dallas Cowboys",
+            "nickName": "Cowboys",
+            "division": "NFC-East"
+        },
+        {
+            "abbr": "DEN",
+            "name": "Denver Broncos",
+            "nickName": "Broncos",
+            "division": "AFC-West"
+        },
+        {
+            "abbr": "DET",
+            "name": "Detroit Lions",
+            "nickName": "Lions",
+            "division": "NFC-North"
+        },
+        {
+            "abbr": "GB",
+            "name": "Green Bay Packers",
+            "nickName": "Packers",
+            "division": "NFC-North"
+        },
+        {
+            "abbr": "HOU",
+            "name": "Houston Texans",
+            "nickName": "Texans",
+            "division": "AFC-South"
+        },
+        {
+            "abbr": "IND",
+            "name": "Indianapolis Colts",
+            "nickName": "Colts",
+            "division": "AFC-South"
+        },
+        {
+            "abbr": "JAX",
+            "name": "Jacksonville Jaguars",
+            "nickName": "Jaguars",
+            "division": "AFC-South"
+        },
+        {
+            "abbr": "KC",
+            "name": "Kansas City Chiefs",
+            "nickName": "Chiefs",
+            "division": "AFC-West"
+        },
+        {
+            "abbr": "MIA",
+            "name": "Miami Dolphins",
+            "nickName": "Dolphins",
+            "division": "AFC-East"
+        },
+        {
+            "abbr": "MIN",
+            "name": "Minnesota Vikings",
+            "nickName": "Vikings",
+            "division": "NFC-North"
+        },
+        {
+            "abbr": "NE",
+            "name": "New England Patriots",
+            "nickName": "Patriots",
+            "division": "AFC-East"
+        },
+        {
+            "abbr": "NO",
+            "name": "New Orleans Saints",
+            "nickName": "Saints",
+            "division": "NFC-South"
+        },
+        {
+            "abbr": "NYG",
+            "name": "New York Giants",
+            "nickName": "Giants",
+            "division": "NFC-East"
+        },
+        {
+            "abbr": "NYJ",
+            "name": "New York Jets",
+            "nickName": "Jets",
+            "division": "AFC-East"
+        },
+        {
+            "abbr": "OAK",
+            "name": "Oakland Raiders",
+            "nickName": "Raiders",
+            "division": "AFC-West"
+        },
+        {
+            "abbr": "PHI",
+            "name": "Philadelphia Eagles",
+            "nickName": "Eagles",
+            "division": "NFC-East"
+        },
+        {
+            "abbr": "PIT",
+            "name": "Pittsburgh Steelers",
+            "nickName": "Steelers",
+            "division": "AFC-North"
+        },
+        {
+            "abbr": "SD",
+            "name": "San Diego Chargers",
+            "nickName": "Chargers",
+            "division": "AFC-West"
+        },
+        {
+            "abbr": "SF",
+            "name": "San Francisco 49ers",
+            "nickName": "49ers",
+            "division": "NFC-West"
+        },
+        {
+            "abbr": "SEA",
+            "name": "Seattle Seahawks",
+            "nickName": "Seahawks",
+            "division": "NFC-West"
+        },
+        {
+            "abbr": "STL",
+            "name": "St. Louis Rams",
+            "nickName": "Rams",
+            "division": "NFC-West"
+        },
+        {
+            "abbr": "TB",
+            "name": "Tampa Bay Buccaneers",
+            "nickName": "Buccaneers",
+            "division": "NFC-South"
+        },
+        {
+            "abbr": "TEN",
+            "name": "Tennessee Titans",
+            "nickName": "Titans",
+            "division": "AFC-South"
+        },
+        {
+            "abbr": "WAS",
+            "name": "Washington Redskins",
+            "nickName": "Redskins",
+            "division": "NFC-East"
+        }
+    ]
+}

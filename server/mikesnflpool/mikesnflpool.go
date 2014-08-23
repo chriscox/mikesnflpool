@@ -4,32 +4,32 @@ import (
   "net/http"
   "github.com/go-martini/martini"
   "github.com/martini-contrib/cors"
-  "server/auth"
-  "server/games"
-  "server/teams"
-
+  "server/mikesnflpool/auth"
+  "server/mikesnflpool/teams"
+  "server/mikesnflpool/games"
 )
 
 func init() {
   m := martini.Classic()
   // Games.
-  // GET            /api/v1/season/:s/games      controllers.api.Games.list(s:Integer, week:Integer ?= null)
-
-  m.Get("/api/season/:s/games", games.GameHandler)
-  m.Post("/api/games", games.AddGameHandler)
-
+  m.Get("/api/season/:season/games", games.GameHandler)
+  
   // Teams.
   m.Get("/api/teams", teams.TeamHandler)
+  
+  // Admin.
+  m.Post("/api/games", games.AddGameHandler)
   m.Post("/api/teams", teams.AddTeamHandler)
 
   // Auth.
-  m.Post("/api/auth/register", auth.RegisterHandler)
+  m.Post("/api/auth", auth.RegisterHandler)
 
   // CORS
   m.Use(cors.Allow(&cors.Options{
     AllowOrigins:     []string{"*"},
     AllowMethods:     []string{"POST", "GET"},
-    AllowHeaders:     []string{"Content-Type"},
+    AllowHeaders:     []string{"Origin", "0", "1", "2", "If-Modified-Since", "Content-Type"},
+    ExposeHeaders:    []string{"Content-Length"},
     AllowCredentials: true,
   }))
 

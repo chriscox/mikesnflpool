@@ -1,3 +1,4 @@
+/*global _:false */
 'use strict';
 
 /**
@@ -8,7 +9,7 @@
  * Service in the clientApp.
  */
 angular.module('clientApp')
-  .service('dataService', function dataService($location, $http, Restangular, $cookieStore, $rootScope) {
+  .service('dataService', function dataService($location, $http, Restangular, $cookieStore, $rootScope, $auth) {
 
 
     var _currentSeason = 2014;
@@ -92,7 +93,7 @@ angular.module('clientApp')
       // } else {
       //   return 17;
       // }
-    }
+    };
 
     var getActiveWeek = function() {
       var week =  $location.search().week;
@@ -120,19 +121,19 @@ angular.module('clientApp')
     // Register
 
     var register = function(firstName, lastName, email, password, remember, callback, onError) {
-      Restangular.all('register').post({
-        firstName:firstName,
-        lastName:lastName,
-        email:email,
-        password:password
-      }).then(function(response) {
-        if (remember) {
-          setUserCookie(response.user);
-        }
-        callback();
-      }, function(error) {
-        onError(error);
-      });
+      // Restangular.all('register').post({
+      //   firstName:firstName,
+      //   lastName:lastName,
+      //   email:email,
+      //   password:password
+      // }).then(function(response) {
+      //   if (remember) {
+      //     setUserCookie(response.user);
+      //   }
+      //   callback();
+      // }, function(error) {
+      //   onError(error);
+      // });
     };
 
     // login/logout
@@ -149,10 +150,10 @@ angular.module('clientApp')
       $cookieStore.remove('user');
     };
 
-    var getToken = function() {
-      var token = $cookieStore.get('user.sessionToken');
-      return {'sessionToken':token};
-    };
+    // var getToken = function() {
+    //   var token = $cookieStore.get('user.sessionToken');
+    //   return {'sessionToken':token};
+    // };
 
     var login = function(email, password, callback, onError) {
       Restangular.all('login').post({
@@ -267,12 +268,13 @@ angular.module('clientApp')
         });
     };
 
-    var addTeam = function(team, callback) {
-      Restangular.all('teams').post({
-        name: team.name,
-        abbr: team.abbr
-      }).then(function(team) {
-        callback(team);
+    var addTeams = function(callback) {
+      $http.get('scripts/teams.json').success(function(data) {
+        _.each(data.teams, function(team) {
+          Restangular.all('teams').post(team).then(function() {
+            callback(data.teams);
+          });
+        });
       });
     };
 
@@ -301,17 +303,17 @@ angular.module('clientApp')
       });
     };
 
-    var addGame = function(game, callback) {
+    var addGame = function(game, callback, onError) {
       Restangular.all('games').post({
-        Season: getActiveSeason(),
-        Week: getActiveWeek(),
+        season: getActiveSeason(),
+        week: getActiveWeek(),
         date: game.date,
-        // homeTeam: game.homeTeam,
-        // awayTeam: game.awayTeam,
+        homeTeamAbbr: game.homeTeam,
+        awayTeamAbbr: game.awayTeam
       }).then(function(game) {
         callback(game);
       }, function(error) {
-        console.log(error);
+        onError(error);
       });
     };
 
@@ -358,7 +360,7 @@ angular.module('clientApp')
       getTeams: getTeams,
       getTeamSchedule: getTeamSchedule,
       getTeamStandings: getTeamStandings,
-      addTeam: addTeam,
+      addTeams: addTeams,
 
       getGames: getGames,
       getAllGames: getAllGames,

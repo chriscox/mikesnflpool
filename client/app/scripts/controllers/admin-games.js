@@ -19,6 +19,7 @@ angular.module('clientApp')
     $scope.getGames = function() {
       dataService.getGames(function(games) {
         $scope.games = games;
+        console.log(games)
       });
     };
 
@@ -34,10 +35,16 @@ angular.module('clientApp')
     };
 
     $scope.addGame = function() {
+      console.log($scope.newGame)
       dataService.addGame($scope.newGame, function(game) {
         $scope.games.push(game);
         $scope.newGame.homeTeam = null;
         $scope.newGame.awayTeam = null;
+      }, function(error) {
+        $scope.error = true;
+        $timeout(function() {
+          $scope.error = false;
+        }, 5000);
       });
     };
 

@@ -69,9 +69,10 @@ angular.module('clientApp')
       var password = user[1];
 
 
-      $auth.signup({
-        email: $scope.email,
-        password: $scope.password
+
+      $auth.submitRegistration({
+        email: email.value,
+        password: password.value
       });
     };
 
