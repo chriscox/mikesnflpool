@@ -20,14 +20,17 @@ angular
     'ui.bootstrap.datetimepicker',
     'ui.bootstrap',
     'restangular',
-    // 'ui.router',
-    'ng-token-auth',
   ])
-  .config(function ($routeProvider, $authProvider) {
+  .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
+      })
+      .when('/make-picks', {
+        templateUrl: 'views/make-picks.html',
+        controller: 'MakePicksCtrl',
+        access: 'user'
       })
       .when('/about', {
         templateUrl: 'views/about.html',
@@ -52,22 +55,30 @@ angular
         controller: 'AdminTeamsCtrl',
         access: 'admin'
       })
+      .when('/admin/tournaments', {
+        templateUrl: 'views/admin-tournaments.html',
+        controller: 'AdminTournamentsCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
 
-    // // ng-token-auth config.
-    // if ($location.host() === 'localhost') {
-      $authProvider.configure({
-        apiUrl: 'http://localhost:8080/api',
-      });
-    // }
-
-  }).run(function(Restangular, $location) {
+  }).run(function(Restangular, $location, $rootScope, dataService) {
     // Restangular config
     if ($location.host() === 'localhost') {
       Restangular.setBaseUrl('http://localhost:8080/api');
     } else {
       Restangular.setBaseUrl('/api');
     }
+      // register listener to watch route changes
+    $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+      var isAuthenticated = dataService.isAuthenticated();
+      if (next.access == 'user' && !isAuthenticated) {
+        // redirect
+        $location.path("/login");
+      } else if (next.access == 'admin' && !isAuthenticated) {
+        // redirect
+        $location.path("/login");
+      }     
+    });
   });

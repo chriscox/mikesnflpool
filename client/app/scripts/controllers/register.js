@@ -8,26 +8,26 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('RegisterCtrl', function ($scope, dataService, $auth) {
+  .controller('RegisterCtrl', function ($scope, dataService) {
     $scope.closed = false;
     $scope.errorText;
     $scope.remember = true;
     $scope.user = {
       'fields': [
-        // {
-        //   'id':'firstName',
-        //   'type':'text',
-        //   'name':'First Name',
-        //   'hasError':false,
-        //   'value':''
-        // },
-        // {
-        //   'id':'lastName',
-        //   'type':'text',
-        //   'name':'Last Name',
-        //   'hasError':false,
-        //   'value':''
-        // },
+        {
+          'id':'firstName',
+          'type':'text',
+          'name':'First Name',
+          'hasError':false,
+          'value':''
+        },
+        {
+          'id':'lastName',
+          'type':'text',
+          'name':'Last Name',
+          'hasError':false,
+          'value':''
+        },
         {
           'id':'email',
           'type':'email',
@@ -62,21 +62,14 @@ angular.module('clientApp')
       });
     };
 
-    $scope.register = function() {
-      var user = $scope.user.fields;
-
-      var email = user[0];
-      var password = user[1];
-
-
-
-      $auth.submitRegistration({
-        email: email.value,
-        password: password.value
+    $scope.getTournaments = function() {
+      dataService.getTournaments(function(tournaments) {
+        $scope.tournaments = tournaments;
       });
     };
 
-    $scope.register_old = function() {
+
+    $scope.register = function() {
       var user = $scope.user.fields;
       var remember = $scope.remember;
       var firstName = user[0];
@@ -106,6 +99,7 @@ angular.module('clientApp')
       // submit
       if (!$scope.hasError()) {
         dataService.register(
+          $scope.register.tournamentKey,
           firstName.value, 
           lastName.value, 
           email.value, 
@@ -122,4 +116,6 @@ angular.module('clientApp')
         });
       }
     }
+
+    $scope.getTournaments();
   });

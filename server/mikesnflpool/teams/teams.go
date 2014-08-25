@@ -12,6 +12,7 @@ type Team struct {
   Name      string  `json:"name"`
   NickName  string  `json:"nickName"`
   Division  string  `json:"division"`
+  Selected  bool    `json:"selected" datastore:"-"` 
 }
   
 
@@ -20,8 +21,7 @@ func TeamHandler(w http.ResponseWriter, r *http.Request) {
   q := datastore.NewQuery("Team").Limit(32)
   teams := make([]Team, 0, 32)
   if _, err := q.GetAll(c, &teams); err != nil {
-    http.Error(w, err.Error(), http.StatusInternalServerError)
-    return
+    panic(err.Error)
   }
   utils.ServeJson(w, &teams)
 }
@@ -30,14 +30,12 @@ func AddTeamHandler(w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
   var t Team
   if err := utils.ReadJson(r, &t); err != nil {
-    http.Error(w, err.Error(), http.StatusInternalServerError)
-    return
+    panic(err.Error)
   }
 
   key := datastore.NewKey(c, "Team", t.Abbr, 0, nil)
   if _, err := datastore.Put(c, key, &t); err != nil {
-    http.Error(w, err.Error(), http.StatusInternalServerError)
-    return
+    panic(err.Error)
   }
   utils.ServeJson(w, &t)
 }

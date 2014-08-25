@@ -9,8 +9,7 @@
  * Service in the clientApp.
  */
 angular.module('clientApp')
-  .service('dataService', function dataService($location, $http, Restangular, $cookieStore, $rootScope, $auth) {
-
+  .service('dataService', function dataService($location, $http, Restangular, $cookieStore, $rootScope) {
 
     var _currentSeason = 2014;
     var _currentWeek = null;
@@ -120,25 +119,26 @@ angular.module('clientApp')
 
     // Register
 
-    var register = function(firstName, lastName, email, password, remember, callback, onError) {
-      // Restangular.all('register').post({
-      //   firstName:firstName,
-      //   lastName:lastName,
-      //   email:email,
-      //   password:password
-      // }).then(function(response) {
-      //   if (remember) {
-      //     setUserCookie(response.user);
-      //   }
-      //   callback();
-      // }, function(error) {
-      //   onError(error);
-      // });
+    var register = function(tournamentKey, firstName, lastName, email, password, remember, callback, onError) {
+      Restangular.all('auth').post({
+        tournamentKey:tournamentKey,
+        firstName:firstName,
+        lastName:lastName,
+        email:email,
+        password:password
+      }).then(function(response) {
+        if (remember) {
+          setUserCookie(response.user);
+        }
+        callback();
+      }, function(error) {
+        onError(error);
+      });
     };
 
     // login/logout
 
-    var setUserCookie = function(user) {
+    var setUserCookie = function(user, tournamentKey) {
       $cookieStore.put('user', user);
     };
 
@@ -146,30 +146,25 @@ angular.module('clientApp')
       return $cookieStore.get('user');
     };
 
-    var clearCookie = function() {
+    var clearCookies = function() {
       $cookieStore.remove('user');
     };
-
-    // var getToken = function() {
-    //   var token = $cookieStore.get('user.sessionToken');
-    //   return {'sessionToken':token};
-    // };
 
     var login = function(email, password, callback, onError) {
       Restangular.all('login').post({
         email:email,
         password:password
-      }).then(function(response) {
-        setUserCookie(response.user);
+      }).then(function(user) {
+        setUserCookie(user);
         $rootScope.$broadcast('isAuthenticated', true);
-        callback();
+        callback(user);
       }, function(error) {
         onError(error);
       });
     };
 
     var logout = function() {
-      clearCookie();
+      clearCookies();
       $rootScope.$broadcast('isAuthenticated', false);
       $location.path('/login');
     };
@@ -204,15 +199,17 @@ angular.module('clientApp')
 
     // UserPicks
 
-    var getUserPicks = function(userId, callback, onError) {
-      Restangular.one('season', _activeSeason)
-        .one('user', userId)
-        .all('userpicks').getList()
-        .then(function(userPicks) {
-          callback(userPicks);
-        }, function(error) {
-          onError(error);
-        });
+    var getUserPicks = function(user, callback, onError) {
+      Restangular.all('userpicks').post({
+        season: getActiveSeason(),
+        week: getActiveWeek(),
+        tournamentKey:user.tournamentKey,
+        userKey:user.userKey,
+      }).then(function(userPicks) {
+        callback(userPicks);
+      }, function(error) {
+        onError(error);
+      });
     };
 
     var getAllUserPicks = function(callback) {
@@ -224,8 +221,9 @@ angular.module('clientApp')
     };
 
     var addUserPick = function(game, user, callback, onError) {
-      Restangular.all('userpicks').post({
-        user: (user === null) ? authenticatedUser() : user,
+      Restangular.all('makepicks').post({
+        tournamentKey:user.tournamentKey,
+        userKey:user.userKey,
         game:game
       }).then(function(pick) {
         callback(pick);
@@ -266,16 +264,6 @@ angular.module('clientApp')
         }).then(function(standings) {
           callback(standings);
         });
-    };
-
-    var addTeams = function(callback) {
-      $http.get('scripts/teams.json').success(function(data) {
-        _.each(data.teams, function(team) {
-          Restangular.all('teams').post(team).then(function() {
-            callback(data.teams);
-          });
-        });
-      });
     };
 
     // Games
@@ -329,6 +317,35 @@ angular.module('clientApp')
       });
     };
 
+    // Admin
+
+    var addTeams = function(callback) {
+      $http.get('scripts/teams.json').success(function(data) {
+        _.each(data.teams, function(team) {
+          Restangular.all('teams').post(team).then(function() {
+            callback(data.teams);
+          });
+        });
+      });
+    };
+
+    var addTournament = function(name, season, callback) {
+      Restangular.all('tournaments').post({
+        name:name,
+        season:parseInt(season)
+      }).then(function(tournament) {
+        callback(tournament)
+      }, function(error) {
+
+      });
+    };
+
+    var getTournaments = function(callback) {
+      Restangular.one('season', getActiveSeason()).all('tournaments').getList()
+      .then(function(tournaments) {
+        callback(tournaments);
+      });
+    };
 
     // Public API
 
@@ -367,6 +384,9 @@ angular.module('clientApp')
       deleteGame: deleteGame,
       addGame: addGame,
       updateGame: updateGame,
+
+      addTournament: addTournament,
+      getTournaments: getTournaments
 
     };
   });

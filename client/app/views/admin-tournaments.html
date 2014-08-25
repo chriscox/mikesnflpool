@@ -1,0 +1,37 @@
+<div id="admin-tournaments">
+
+  <div class="page-header">
+    <h3>Admin: Tournaments</h3>
+  </div>
+
+   <div class="well">
+    <form ng-submit="addTournament()" class="form-inline" role="form">
+      <fieldset>
+        <input  ng-model="tournamentName" class="form-control"
+                id="tournamentName" placeholder="Tournament Name">
+        <input  ng-model="tournamentSeason" class="form-control"
+                id="tournamentSeason" placeholder="Season">
+        <button type="submit" class="btn btn-primary btn-sm">Add Tournament</button>
+      </fieldset>
+    </form>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table  table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tournament Name</th>
+          <th>Season</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="tournament in tournaments">
+          <td><div>{{$index + 1}}</div></td>
+          <td><div>{{tournament.name}}</div></td>
+          <td><div>{{tournament.season}}</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

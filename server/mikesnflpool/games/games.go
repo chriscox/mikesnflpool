@@ -12,19 +12,32 @@ import (
   "strconv"
 )
 
+type Tournament struct {
+  Name          string          `json:"name"`
+}
+
+type GameEvent struct {
+  TournamentKey *datastore.Key  `json:"tournament"`
+  Season        int             `json:"season"`
+  Week          int             `json:"week"`
+}
+
 type Game struct {
   Season        int             `json:"season"`
   Week          int             `json:"week"`
   Date          time.Time       `json:"date"`
-
-  AwayTeamKey   *datastore.Key  `json:"awayTeam.key"`
+  GameKey       *datastore.Key  `json:"gameKey" datastore:"-"` 
+ 
+  AwayTeamKey   *datastore.Key  `json:"awayTeamKey"`
   AwayTeamAbbr  string          `json:"awayTeamAbbr" datastore:"-"` 
   AwayTeam      teams.Team      `json:"awayTeam" datastore:"-"` 
 
-  HomeTeamKey   *datastore.Key  `json:"homeTeam.key"`
+  HomeTeamKey   *datastore.Key  `json:"homeTeamKey"`
   HomeTeamAbbr  string          `json:"homeTeamAbbr" datastore:"-"` 
   HomeTeam      teams.Team      `json:"homeTeam" datastore:"-"` 
 }
+
+
 
 func GameHandler(parms martini.Params, w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
@@ -44,23 +57,22 @@ func GameHandler(parms martini.Params, w http.ResponseWriter, r *http.Request) {
            Filter("Season =", season).
            Filter("Week =", week)
   var games []Game
-  if _, err := q.GetAll(c, &games); err != nil {
+  gameKeys, err := q.GetAll(c, &games)
+  if err != nil {
     panic(err.Error)
   }
 
   // Associate team with game
   for i := range games {
-    awayTeamKey := games[i].AwayTeamKey.Encode()
-    homeTeamKey := games[i].HomeTeamKey.Encode()
-    for j, k := range teamKeys {
-      teamKey := k.Encode()
-      // Compare keys
-      if awayTeamKey == teamKey {
-        games[i].AwayTeam = allTeams[j]
+    game := &games[i]
+    game.GameKey = gameKeys[i]
+    for j, teamKey := range teamKeys {
+      if game.AwayTeamKey.Equal(teamKey) {
+        game.AwayTeam = allTeams[j]
         continue
       }
-      if homeTeamKey == teamKey {
-        games[i].HomeTeam = allTeams[j]
+      if game.HomeTeamKey.Equal(teamKey) {
+        game.HomeTeam = allTeams[j]
         continue
       }
     }
@@ -84,8 +96,7 @@ func AddGameHandler(w http.ResponseWriter, r *http.Request) {
   key := datastore.NewIncompleteKey(c, "Game", nil)
   _, err := datastore.Put(c, key, &g)
   if err != nil {
-    http.Error(w, err.Error(), http.StatusInternalServerError)
-    return
+    panic(err.Error)
   }
   utils.ServeJson(w, &g)
 }

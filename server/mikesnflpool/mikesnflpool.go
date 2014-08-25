@@ -4,25 +4,36 @@ import (
   "net/http"
   "github.com/go-martini/martini"
   "github.com/martini-contrib/cors"
-  "server/mikesnflpool/auth"
+  "server/mikesnflpool/user"
   "server/mikesnflpool/teams"
+  "server/mikesnflpool/tournaments"
   "server/mikesnflpool/games"
 )
 
 func init() {
   m := martini.Classic()
-  // Games.
+  // Games
   m.Get("/api/season/:season/games", games.GameHandler)
   
-  // Teams.
+  // Teams
   m.Get("/api/teams", teams.TeamHandler)
-  
-  // Admin.
+
+  // User
+  // m.Get("/api/season/:season/tournament/:tournament/user/:user/userpicks", user.UserPickHandler)
+  m.Post("/api/userpicks", user.UserPickHandler)
+  m.Post("/api/makepicks", user.AddUserPickHandler)
+
+  // Auth
+  m.Post("/api/login", user.LoginHandler)
+  m.Post("/api/auth", user.UserRegistrationHandler)
+
+  // Tournament
+  m.Get("/api/season/:season/tournaments", tournaments.TournamentHandler)
+  m.Post("/api/tournaments", tournaments.AddTournamentHandler)
+
+  // Admin
   m.Post("/api/games", games.AddGameHandler)
   m.Post("/api/teams", teams.AddTeamHandler)
-
-  // Auth.
-  m.Post("/api/auth", auth.RegisterHandler)
 
   // CORS
   m.Use(cors.Allow(&cors.Options{
