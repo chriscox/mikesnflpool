@@ -241,8 +241,7 @@ angular.module('clientApp')
         .one('userstats').get()
         .then(function(userStats) {
           callback(userStats);
-        }, function(error) {
-          console.log(error)
+        }, function() {
         });
     };
 

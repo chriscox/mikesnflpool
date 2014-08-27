@@ -21,7 +21,6 @@ angular.module('clientApp')
 
     $scope.getUserStats = function() {
       dataService.getUserStats(function(userStats) {
-        console.log(userStats)
         $scope.userStats = userStats;
         $scope.render();
       });
@@ -38,8 +37,6 @@ angular.module('clientApp')
           user.moneyTotal = 0;
           user.total = 0;
 
-          console.log($scope.userStats.stats)
-
           for (var i=0; i<17; i++) {
             var wins = $scope.userStats.stats[user.userKey][i+1];
             if (wins) {
@@ -48,7 +45,7 @@ angular.module('clientApp')
             } else {
               user[i] = null;
             }
-          };
+          }
         });
 
         // sort by firstName then wins
