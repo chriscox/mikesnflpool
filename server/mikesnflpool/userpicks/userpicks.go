@@ -11,6 +11,7 @@ import (
   "server/mikesnflpool/utils"
   "strconv"
   "time"
+  // "encoding/json"
 )
 
 type UserPick struct {
@@ -25,14 +26,21 @@ type UserPick struct {
   Week              int             `json:"week" datastore:"-"`
 }
 
-type winsMap struct {
-  userKey           string
-  weeklyWins        map[string]int
-}
+// type WeeklyWins struct {
+//   Week              int
+//   Wins              int
+// }
 
-func NewStatsMap() *winsMap {
-  return &winsMap{userKey: "", weeklyWins: make(map[string]int)}
-}
+type WeeklyWins     map[string]int
+type UserWins       map[string]WeeklyWins
+
+type StatsMap struct {
+  Stats              UserWins      `json:"stats"`
+ }
+
+// func NewWeeklyWins() *winsMap {
+//   return &winsMap{userKey: "", weeklyWins: make(map[string]int)}
+// }
 
 func UserStatsHandler(params martini.Params, w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
@@ -60,110 +68,87 @@ func UserStatsHandler(params martini.Params, w http.ResponseWriter, r *http.Requ
   // }
 
   // Get all userpicks
-  // q := datastore.NewQuery("UserPick").Ancestor(tournamentKey)
-  // var allPicks []UserPick
-  // _, err = q.GetAll(c, &allPicks)
-  // if err != nil {
-  //   panic(err.Error)
-  // }
+  q = datastore.NewQuery("UserPick").Ancestor(tournamentKey)
+  var allPicks []UserPick
+  _, err = q.GetAll(c, &allPicks)
+  if err != nil {
+    panic(err.Error)
+  }
 
-  // var gameKeys []*datastore.Key
-  // for _, pick := range allPicks {
-  //   // Save game keys to associate game data later
-  //   gameKeys = append(gameKeys, pick.GameKey)
-  // }
+  // Save game keys to associate game data later
+  var gameKeys []*datastore.Key
+  for _, pick := range allPicks {
+    gameKeys = append(gameKeys, pick.GameKey)
+  }
 
-  // // Get games with keys
-  // var games = make([]games.Game, len(allPicks))
-  // if err := datastore.GetMulti(c, gameKeys, games); err != nil {
-  //   panic(err.Error)
-  // }
+  // Get games with keys
+  var games = make([]games.Game, len(allPicks))
+  if err := datastore.GetMulti(c, gameKeys, games); err != nil {
+    panic(err.Error)
+  }
 
-  // // Associate game with picks
-  // for i, pick := range allPicks {
-  //   for j, key := range gameKeys {
-  //     if pick.GameKey.Equal(key) {
-  //       allPicks[i].Game = games[j]
-  //       break
-  //     }
-  //   }
-  // }
+  // Associate game with picks
+  for i, pick := range allPicks {
+    for j, key := range gameKeys {
+      if pick.GameKey.Equal(key) {
+        allPicks[i].Game = games[j]
+        break
+      }
+    }
+  }
 
-  // var m map[*dataStore.Key]map
-  // for i, k := range tournamentUsersKeys {
+  // Calc wins
+  var userWins = make(map[string]WeeklyWins)
+  for _, u := range tournamentUsers {
+    var weeklyWins = make(map[string]int)
+    for _, p := range allPicks {
+      if u.UserKey.Equal(p.UserKey) {
+        if isSpreadWinner(p.Game, p) {
+          weeklyWins[strconv.Itoa(p.Game.Week)] += 1
+        }
+      }
+    }
+    userWins[u.UserKey.Encode()] = weeklyWins
+  }
 
-  //   winsMap :=  winsMap
-  //   for j, p := allPicks {
-  //     winsMap.weeklyWins[1] = 10
-  //   }
-
-
-  // }
-
-  // var stats = make([]winsMap, 2)
-  stats := NewStatsMap()
-  stats.userKey = tournamentUsers[0].UserKey.Encode()
-  stats.weeklyWins["1"] = 3
-  stats.weeklyWins["4"] = 10
-
-  // if (isSpreadWinner(game, pick)) {
-//           Integer o = winsMap.get(game.week.toString());
-//           if (o != null) {
-//             o += 1;
-//             winsMap.put(game.week.toString(), o);
-//           } else {
-//             winsMap.put(game.week.toString(), 1);
-//           }
-//         }
-
-  c.Infof("%v", stats)
-  c.Infof("%v", tournamentUsers[0].UserKey.Encode())
-
-
-  utils.ServeJson(w, stats)
+  var stats StatsMap
+  stats.Stats = userWins
+  utils.ServeJson(w, &stats)
 }
 
-  
-// public static Result userStats(Integer season) {
-//     addCorsHeader();
+func isGameWinner(game games.Game, teamKey *datastore.Key) bool {
+  if game.AwayTeamScore > game.HomeTeamScore {
+    return teamKey.Equal(game.AwayTeamKey)
+  } else if game.AwayTeamScore < game.HomeTeamScore {
+    return teamKey.Equal(game.HomeTeamKey)
+  } else {
+    return false
+  }
+}
 
-//     ObjectNode result = Json.newObject();
-
-//     List<User> users = User.find.all();
-
-//     ObjectNode usersNode = Json.newObject();
-
-//     for (User user : users) {
-
-//       Map<String, Integer> winsMap = new HashMap();
-//       Integer wins = 0;
-
-//       List<UserPick>picks = user.userPicks;
-
-
-//       ObjectNode week = Json.newObject();
-//       for (UserPick pick : picks) {
-
-//         Game game = pick.game;
-
-//         if (isSpreadWinner(game, pick)) {
-//           Integer o = winsMap.get(game.week.toString());
-//           if (o != null) {
-//             o += 1;
-//             winsMap.put(game.week.toString(), o);
-//           } else {
-//             winsMap.put(game.week.toString(), 1);
-//           }
-//         }
-//       }
-
-//       usersNode.put(user.id.toString(), Json.toJson( winsMap));
-//     }
-
-//     result.put("user", usersNode);
-
-//     return ok(result);
-//   }
+func isSpreadWinner(game games.Game, pick UserPick) bool {
+  if game.Ended {
+    if (float32(game.AwayTeamScore) - game.AwayTeamSpread) > (float32(game.HomeTeamScore) - game.HomeTeamSpread) {
+      if (pick.TeamKey.Equal(game.AwayTeamKey)) {
+        return true
+      }
+    } else if (float32(game.AwayTeamScore) - game.AwayTeamSpread) < (float32(game.HomeTeamScore) - game.HomeTeamSpread) {
+      if (pick.TeamKey.Equal(game.HomeTeamKey)) {
+        return true
+      }
+    } else {
+      // If score minus spread equals other teams, then give losing
+      // team the spread win. Teams must win spread + 1, not be equal.
+      gameWinner := isGameWinner(game, game.AwayTeamKey)
+      if !gameWinner {
+        return pick.TeamKey.Equal(game.AwayTeamKey)
+      } else {
+        return pick.TeamKey.Equal(game.HomeTeamKey)
+      }
+    }
+  }
+  return false 
+}
 
 // TODO: Combine this and UserPickHandler
 func AllUserPickHandler(params martini.Params, w http.ResponseWriter, r *http.Request) {

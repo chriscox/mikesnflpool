@@ -52,7 +52,7 @@ angular.module('clientApp')
     };
 
     $scope.hasError = function() {
-      return (_.findWhere($scope.user.fields, { hasError:true }) !== null);
+      return (_.findWhere($scope.user.fields, { hasError:true }) != null);
     };
 
     $scope.clearErrors = function() {

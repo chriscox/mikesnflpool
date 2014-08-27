@@ -238,9 +238,8 @@ angular.module('clientApp')
     var getUserStats = function(callback) {
       Restangular.one('tournament', authenticatedUser().tournamentKey)
         .one('season', getActiveSeason())
-        .all('userstats').getList()
+        .one('userstats').get()
         .then(function(userStats) {
-          console.log('got it')
           callback(userStats);
         }, function(error) {
           console.log(error)
