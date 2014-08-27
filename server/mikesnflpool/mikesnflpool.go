@@ -4,24 +4,31 @@ import (
   "net/http"
   "github.com/go-martini/martini"
   "github.com/martini-contrib/cors"
-  "server/mikesnflpool/user"
+  "server/mikesnflpool/games"
   "server/mikesnflpool/teams"
   "server/mikesnflpool/tournaments"
-  "server/mikesnflpool/games"
+  "server/mikesnflpool/user"
+  "server/mikesnflpool/userpicks"
 )
 
 func init() {
   m := martini.Classic()
   // Games
-  m.Get("/api/season/:season/games", games.GameHandler)
+  m.Get("/api/season/:s/games", games.GameHandler)
+  // TODO: Convert this to a DELETE instead of POST
+  //m.Delete("/api/games/:g", games.DeleteGameHandler)
+  m.Post("/api/deletegame/:g", games.DeleteGameHandler)
+  m.Post("/api/games", games.AddOrUpdateGameHandler)
   
   // Teams
   m.Get("/api/teams", teams.TeamHandler)
 
   // User
-  // m.Get("/api/season/:season/tournament/:tournament/user/:user/userpicks", user.UserPickHandler)
-  m.Post("/api/userpicks", user.UserPickHandler)
-  m.Post("/api/makepicks", user.AddUserPickHandler)
+  m.Get("/api/tournament/:t/users", user.UserHandler)
+  m.Get("/api/tournament/:t/season/:s/userpicks", userpicks.AllUserPickHandler)
+  m.Get("/api/tournament/:t/season/:s/user/:u/userpicks", userpicks.UserPickHandler)
+  m.Post("/api/userpicks", userpicks.AddUserPickHandler)
+  m.Get("/api/tournament/:t/season/:s/userstats", userpicks.UserStatsHandler)
 
   // Auth
   m.Post("/api/login", user.LoginHandler)
@@ -32,14 +39,14 @@ func init() {
   m.Post("/api/tournaments", tournaments.AddTournamentHandler)
 
   // Admin
-  m.Post("/api/games", games.AddGameHandler)
+  
   m.Post("/api/teams", teams.AddTeamHandler)
 
   // CORS
   m.Use(cors.Allow(&cors.Options{
     AllowOrigins:     []string{"*"},
-    AllowMethods:     []string{"POST", "GET"},
-    AllowHeaders:     []string{"Origin", "0", "1", "2", "If-Modified-Since", "Content-Type"},
+    AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE"},
+    AllowHeaders:     []string{"*", "Origin", "0", "1", "2", "If-Modified-Since", "Content-Type"},
     ExposeHeaders:    []string{"Content-Length"},
     AllowCredentials: true,
   }))

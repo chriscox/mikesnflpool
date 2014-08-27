@@ -1,3 +1,4 @@
+/*global _:false */
 'use strict';
 
 /**
@@ -73,7 +74,7 @@ angular.module('clientApp')
     };
 
     $scope.addUserPick = function(game) {
-      dataService.addUserPick(game, dataService.authenticatedUser(), function(pick) {
+      dataService.addUserPick(game, dataService.authenticatedUser(), function() {
         
       });
     };
@@ -99,14 +100,14 @@ angular.module('clientApp')
               $scope.selectTeam(game, 'away');
               break;
             case 'favorite':
-              if (game.homeSpread >= game.awaySpread) {
+              if (game.homeTeamSpread >= game.awayTeamSpread) {
                 $scope.selectTeam(game, 'home');
               } else {
                 $scope.selectTeam(game, 'away');
               }
               break;
             case 'underdog':
-              if (game.homeSpread <= game.awaySpread) {
+              if (game.homeTeamSpread <= game.awayTeamSpread) {
                 $scope.selectTeam(game, 'home');
               } else {
                 $scope.selectTeam(game, 'away');

@@ -10,15 +10,19 @@ $orangeColor: #f89406;
 
 /*-- Bootstrap --*/
 
-/*.navbar-inverse .navbar-nav > li > a {
-  color: #f1f1f1;
+.navbar-inverse .navbar-nav > li > a {
+  color: #bbb;
+}
+
+.navbar-inverse .navbar-brand {
+  color: #bbb;
 }
 
 .navbar-inverse .navbar-nav > .active > a,
 .navbar-inverse .navbar-nav > .active > a:hover,
 .navbar-inverse .navbar-nav > .active > a:focus {
   background-color: #3F3F3F;
-}*/
+}
 
 /*-- Main --*/
 
@@ -33,6 +37,21 @@ body {
 
 .container { background-color: #FFF }
 
+.badge {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  background-color: #999;
+  border-radius: 10px;
+  opacity: 0.8;
+}
 .badge-success { background-color:$greenColor; }
 .badge-important { background-color: $redColor; }
 .badge-info { background-color: $blueColor; }

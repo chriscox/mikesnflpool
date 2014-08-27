@@ -1,3 +1,4 @@
+/*global _:false */
 'use strict';
 
 /**
@@ -10,8 +11,6 @@
 angular.module('clientApp')
   .controller('RegisterCtrl', function ($scope, dataService) {
     $scope.closed = false;
-    $scope.errorText;
-    $scope.remember = true;
     $scope.user = {
       'fields': [
         {
@@ -53,7 +52,7 @@ angular.module('clientApp')
     };
 
     $scope.hasError = function() {
-      return (_.findWhere($scope.user.fields, { hasError:true }) != null);
+      return (_.findWhere($scope.user.fields, { hasError:true }) !== null);
     };
 
     $scope.clearErrors = function() {
@@ -71,7 +70,6 @@ angular.module('clientApp')
 
     $scope.register = function() {
       var user = $scope.user.fields;
-      var remember = $scope.remember;
       var firstName = user[0];
       var lastName = user[1];
       var email = user[2];
@@ -83,9 +81,9 @@ angular.module('clientApp')
 
       // ensure all fields non-empty
       _.each(user.fields, function(field) {
-        if (field.value == '') {
+        if (field.value === '') {
           field.hasError = true;
-          $scope.errorText = "All fields are required.";
+          $scope.errorText = 'All fields are required.';
         }
       });
 
@@ -93,7 +91,7 @@ angular.module('clientApp')
       if (password.value !== passwordConfirm.value) {
         password.hasError = true;
         passwordConfirm.hasError = true;
-        $scope.errorText = "Password confirmation must match.";
+        $scope.errorText = 'Password confirmation must match.';
       }
 
       // submit
@@ -104,18 +102,17 @@ angular.module('clientApp')
           lastName.value, 
           email.value, 
           password.value,
-          remember,
         function() {
           $scope.hasSuccess = true;
         }, function(error) {
-          if (error.status == 400) {
+          if (error.status === 400) {
             email.hasError = true;
             $scope.errorText = error.data;
           }
           $scope.hasSuccess = false;
         });
       }
-    }
+    };
 
     $scope.getTournaments();
   });

@@ -93,24 +93,24 @@
             {{game.awayTeam.abbr}}</div>
           </td>
           <td class="editable-input">
-            <div ng-show="!edit">{{game.awayScore}}</div>
-            <input ng-show="edit" type="number" min="0" ng-model="game.awayScore">
+            <div ng-show="!edit">{{game.awayTeamScore}}</div>
+            <input ng-show="edit" type="number" min="0" ng-model="game.awayTeamScore">
           </td>
           <td class="editable-input">
-            <div ng-show="!edit">{{game.awaySpread}}</div>
-            <input ng-show="edit" type="number" min="0" ng-model="game.awaySpread">
+            <div ng-show="!edit">{{game.awayTeamSpread}}</div>
+            <input ng-show="edit" type="number" min="0" ng-model="game.awayTeamSpread">
           </td>
           <td>
             <div class="team-icon-small team-{{game.homeTeam.nickName}}">
             {{game.homeTeam.abbr}}</div>
           </td>
           <td class="editable-input">
-            <div ng-show="!edit">{{game.homeScore}}</div>
-            <input ng-show="edit" type="number" min="0" ng-model="game.homeScore">
+            <div ng-show="!edit">{{game.homeTeamScore}}</div>
+            <input ng-show="edit" type="number" min="0" ng-model="game.homeTeamScore">
           </td>
           <td class="editable-input">
-            <div ng-show="!edit">{{game.homeSpread}}</div>
-            <input ng-show="edit" type="number" min="0" ng-model="game.homeSpread">
+            <div ng-show="!edit">{{game.homeTeamSpread}}</div>
+            <input ng-show="edit" type="number" min="0" ng-model="game.homeTeamSpread">
           </td>
           <td><input type="checkbox" ng-model="game.ended" /></td>
           <td>

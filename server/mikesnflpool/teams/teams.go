@@ -18,7 +18,7 @@ type Team struct {
 
 func TeamHandler(w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
-  q := datastore.NewQuery("Team").Limit(32)
+  q := datastore.NewQuery("Team")
   teams := make([]Team, 0, 32)
   if _, err := q.GetAll(c, &teams); err != nil {
     panic(err.Error)
@@ -39,3 +39,13 @@ func AddTeamHandler(w http.ResponseWriter, r *http.Request) {
   }
   utils.ServeJson(w, &t)
 }
+
+// func GetAllTeams(r *http.Request) ([]Team, error) {
+//   c := appengine.NewContext(r)
+//   q := datastore.NewQuery("Team")
+//   var teams []Team
+//   if _, err := q.GetAll(c, &teams); err != nil {
+//     return nil, err
+//   }
+//   return teams, nil
+// }

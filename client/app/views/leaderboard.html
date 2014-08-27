@@ -1,0 +1,65 @@
+<div id="leaderboard">
+  <div class="page-header">
+    <h3>Leaderboard</h3>
+  </div>
+
+  <tabset  type="'pills'">
+
+    <tab heading="Overall Points">
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered table-condensed">
+          <thead>
+            <tr >
+              <th rowspan="2" class="text-center">#</th>
+              <th rowspan="2" class="text-center">Place</th>
+              <th rowspan="2">Player</th>
+              <th colspan="17" class="text-center">Points per Week</th>
+              <th rowspan="2" class="text-center">Total</th>
+            </tr>
+            <tr>
+              <th ng-repeat="n in [] | range:17" class="text-center"><small>{{$index + 1}}</small></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="user in users">
+              <td class="text-center">{{$index+1}}</td>
+              <td class="text-center text-primary"><span class="badge badge-info"><small>{{user.place}}</small></span></td>
+              <td><a href="#/player-stats?userId={{user.id}}">{{user.firstName}} {{user.lastName | substring:1 }}</a></td>
+              <td ng-repeat="n in [] | range:17" class="text-center">
+                <div ng-bind="user[n]"></div>
+              </td>
+              <th class="text-center">{{user.total}}</th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </tab>
+
+    <tab heading="Money Winners">
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered table-condensed">
+          <thead>
+            <tr >
+              <th rowspan="2" class="text-center">#</th>
+              <th rowspan="2">Player</th>
+              <th colspan="17" class="text-center">Money per Week</th>
+              <th rowspan="2" class="text-center">Total</th>
+            </tr>
+            <tr>
+              <th ng-repeat="n in [] | range:17" class="text-center"><small>{{$index + 1}}</small></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="user in realUsers">
+              <td class="text-center">{{$index+1}}</td>
+              <td><a href="#/player-stats?userId={{user.id}}">{{user.firstName}} {{user.lastName | substring:1 }}</a></td>
+              <td ng-repeat="n in [] | range:17" class="text-center">
+                <div ng-bind="user.moneyWins[n]"></div>
+              </td>
+              <th class="text-center">${{user.moneyTotal}}</th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </tab>
+  </tabset>

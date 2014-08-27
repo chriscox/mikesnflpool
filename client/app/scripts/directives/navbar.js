@@ -7,7 +7,7 @@
  * # navbar
  */
 angular.module('clientApp')
-  .directive('navbar', function (dataService) {
+  .directive('navbar', function (dataService, $location) {
     return {
       templateUrl: 'views/navbar.html',
       restrict: 'AE',
@@ -26,6 +26,12 @@ angular.module('clientApp')
 
         // initial state
         scope.user = dataService.authenticatedUser();
+
+        // Manually set route to keep the location.search value.
+        // Otherwise controllers load twice for search '?week=X'
+        scope.routeTo = function(route) {
+          $location.path(route)
+        }
 
         // watch route to determine active nav
         scope.$watch(function() {

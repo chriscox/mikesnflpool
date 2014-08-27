@@ -119,18 +119,17 @@ angular.module('clientApp')
 
     // Register
 
-    var register = function(tournamentKey, firstName, lastName, email, password, remember, callback, onError) {
+    var register = function(tournamentKey, firstName, lastName, email, password, callback, onError) {
       Restangular.all('auth').post({
         tournamentKey:tournamentKey,
         firstName:firstName,
         lastName:lastName,
         email:email,
         password:password
-      }).then(function(response) {
-        if (remember) {
-          setUserCookie(response.user);
-        }
-        callback();
+      }).then(function(user) {
+        setUserCookie(user);
+        $rootScope.$broadcast('isAuthenticated', true);
+        callback(user);
       }, function(error) {
         onError(error);
       });
@@ -138,7 +137,7 @@ angular.module('clientApp')
 
     // login/logout
 
-    var setUserCookie = function(user, tournamentKey) {
+    var setUserCookie = function(user) {
       $cookieStore.put('user', user);
     };
 
@@ -187,10 +186,10 @@ angular.module('clientApp')
       if (_users) {
         return callback(_users);
       } else {
-        Restangular.all('users').getList({
-        }).then(function(users) {
+        Restangular.one('tournament', authenticatedUser().tournamentKey)
+        .all('users').getList().then(function(users) {
           _users = users;
-          return callback(_users);
+          return callback(users);
         }, function(error) {
           parseError(error);
         });
@@ -200,11 +199,11 @@ angular.module('clientApp')
     // UserPicks
 
     var getUserPicks = function(user, callback, onError) {
-      Restangular.all('userpicks').post({
-        season: getActiveSeason(),
+      Restangular.one('tournament', user.tournamentKey)
+      .one('season', getActiveSeason())
+      .one('user', user.userKey)
+      .all('userpicks').getList({
         week: getActiveWeek(),
-        tournamentKey:user.tournamentKey,
-        userKey:user.userKey,
       }).then(function(userPicks) {
         callback(userPicks);
       }, function(error) {
@@ -212,16 +211,20 @@ angular.module('clientApp')
       });
     };
 
-    var getAllUserPicks = function(callback) {
-      Restangular.one('season', _activeSeason)
-        .all('userpicks').getList({week: getActiveWeek()})
-        .then(function(userPicks) {
+    var getAllUserPicks = function(callback, onError) {
+      Restangular.one('tournament', authenticatedUser().tournamentKey)
+        .one('season', getActiveSeason())
+        .all('userpicks').getList({
+          week: getActiveWeek()
+        }).then(function(userPicks) {
           callback(userPicks);
+        }, function(error) {
+          onError(error);
         });
     };
 
     var addUserPick = function(game, user, callback, onError) {
-      Restangular.all('makepicks').post({
+      Restangular.all('userpicks').post({
         tournamentKey:user.tournamentKey,
         userKey:user.userKey,
         game:game
@@ -233,10 +236,15 @@ angular.module('clientApp')
     };
 
     var getUserStats = function(callback) {
-      Restangular.one('season', getActiveSeason()).all('userstats').getList({
-      }).then(function(userStats) {
-        callback(userStats);
-      });
+      Restangular.one('tournament', authenticatedUser().tournamentKey)
+        .one('season', getActiveSeason())
+        .all('userstats').getList()
+        .then(function(userStats) {
+          console.log('got it')
+          callback(userStats);
+        }, function(error) {
+          console.log(error)
+        });
     };
 
     // Teams
@@ -269,10 +277,11 @@ angular.module('clientApp')
     // Games
 
     var getGames = function(callback) {
-      Restangular.one('season', getActiveSeason()).all('games').getList({
+       Restangular.one('season', getActiveSeason()).all('games').getList({
         week: getActiveWeek()
       }).then(function(games) {
         callback(games);
+      }, function() {
       });
     };
 
@@ -284,7 +293,14 @@ angular.module('clientApp')
     };
 
     var deleteGame = function(game, callback, onError) {
-      Restangular.one('games', game.id).remove().then(function() {
+      // TODO: Convert this to DELETE from POST
+      // Restangular.one('games', game.gameKey).remove().then(function() {
+      //   callback();
+      // }, function(error) {
+      //   console.log(error)
+      //   onError(error);
+      // });
+      Restangular.one('deletegame', game.gameKey).post().then(function() {
         callback();
       }, function(error) {
         onError(error);
@@ -309,7 +325,12 @@ angular.module('clientApp')
       Restangular.all('games').post({
         season: getActiveSeason(),
         week: getActiveWeek(),
-        game: game
+        gameKey: game.gameKey,
+        awayTeamScore: game.awayTeamScore,
+        awayTeamSpread: game.awayTeamSpread,
+        homeTeamScore: game.homeTeamScore,
+        homeTeamSpread: game.homeTeamSpread,
+        ended: game.ended
       }).then(function(game) {
         callback(game);
       }, function(error) {
@@ -334,8 +355,8 @@ angular.module('clientApp')
         name:name,
         season:parseInt(season)
       }).then(function(tournament) {
-        callback(tournament)
-      }, function(error) {
+        callback(tournament);
+      }, function() {
 
       });
     };

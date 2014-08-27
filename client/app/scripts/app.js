@@ -23,13 +23,27 @@ angular
   ])
   .config(function ($routeProvider) {
     $routeProvider
-      .when('/', {
+      .when('/main', {
         templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+        access: 'user'
+      })
+       .when('/rules', {
+        templateUrl: 'views/rules.html',
+        access: 'user'
       })
       .when('/make-picks', {
         templateUrl: 'views/make-picks.html',
         controller: 'MakePicksCtrl',
+        access: 'user'
+      })
+      .when('/player-picks', {
+        templateUrl: 'views/player-picks.html',
+        controller: 'PlayerPicksCtrl',
+        access: 'user'
+      })
+      .when('/leaderboard', {
+        templateUrl: 'views/leaderboard.html',
+        controller: 'LeaderboardCtrl',
         access: 'user'
       })
       .when('/about', {
@@ -43,6 +57,21 @@ angular
       .when('/login', {
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl'
+      })
+      .when('/team-stats', {
+        templateUrl: 'views/team-stats.html',
+        // controller: 'TeamStatsCtrl',
+        access: 'user'
+      })
+      .when('/player-stats', {
+        templateUrl: 'views/player-stats.html',
+        // controller: 'PlayerStatsCtrl',
+        access: 'user'
+      })
+      .when('/profile', {
+        templateUrl: 'views/profile.html',
+        // controller: 'ProfileCtrl',
+        access: 'user'
       })
       // admin
       .when('/admin/games', {
@@ -71,14 +100,14 @@ angular
       Restangular.setBaseUrl('/api');
     }
       // register listener to watch route changes
-    $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+    $rootScope.$on('$routeChangeStart', function(event, next) {
       var isAuthenticated = dataService.isAuthenticated();
-      if (next.access == 'user' && !isAuthenticated) {
+      if (next.access === 'user' && !isAuthenticated) {
         // redirect
-        $location.path("/login");
-      } else if (next.access == 'admin' && !isAuthenticated) {
+        $location.path('/login');
+      } else if (next.access === 'admin' && !isAuthenticated) {
         // redirect
-        $location.path("/login");
+        $location.path('/login');
       }     
     });
   });

@@ -6,53 +6,32 @@ api_version: go1
 handlers:
 - url: /api/.*
   script: _go_app
-
-# Dist URLs
+  secure: always
 
 - url: /bower_components/*
   static_dir: client/dist/bower_components
+  secure: always
 
 - url: /images/*
   static_dir: client/dist/images
+  secure: always
 
 - url: /scripts/*
   static_dir: client/dist/scripts
+  secure: always
 
 - url: /styles/*
   static_dir: client/dist/styles
+  secure: always
 
 - url: /views/*
   static_dir: client/dist/views
+  secure: always
 
 - url: /.*
   static_files: client/dist/index.html
   upload: client/dist/index.html
-
-admin_console:
-  pages:
-  - name: Game Admin
-    url: /admin/games
-
-# Debug URLs
-
-# - url: /bower_components/*
-#   static_dir: client/bower_components
-
-# - url: /images/*
-#   static_dir: client/app/images
-
-# - url: /scripts/*
-#   static_dir: client/app/scripts
-
-# - url: /styles/*
-#   static_dir: client/app/styles
-
-# - url: /views/*
-#   static_dir: client/app/views
-
-# - url: /.*
-#   static_files: client/app/index.html
-#   upload: .*/client/app/index.html
+  secure: always
 
 skip_files:
   # - ^(.*/)?#.*#

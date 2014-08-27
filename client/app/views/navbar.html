@@ -7,26 +7,26 @@
       <span class="icon-bar"></span>
     </button>
 
-    <a class="navbar-brand" href="#/">Mike's NFL Pool</a>
+    <a class="navbar-brand" ng-click="routeTo('/main');" href="">Mike's NFL Pool</a>
   </div>
   <div class="navbar-collapse collapse">
     
     <ul class="nav navbar-nav">
     
       <li ng-show="user" ng-class="{active:route=='/rules'}">
-        <a href="#rules">Rules</a>
+        <a ng-click="routeTo('/rules');" href="">Rules</a>
       </li> 
 
       <li ng-show="user" ng-class="{active:route=='/leaderboard'}">
-        <a href="#/leaderboard">Leaderboard</a>
+        <a ng-click="routeTo('/leaderboard');" href="">Leaderboard</a>
       </li>
 
       <li ng-show="user" ng-class="{active:route=='/make-picks'}">
-        <a href="#/make-picks">Make Picks</a>
+        <a ng-click="routeTo('/make-picks');" href="">Make Picks</a>
       </li>
 
       <li ng-show="user" ng-class="{active:route=='/player-picks'}">
-        <a href="#/player-picks">Player Picks</a>
+        <a ng-click="routeTo('/player-picks');" href="">Player Picks</a>
       </li>
 
       <li ng-show="user" class="dropdown" >
@@ -34,11 +34,11 @@
           <strong>Stats</strong> <span class="caret"></span></a>
         <ul class="dropdown-menu" role="menu">
           <li ng-show="user" ng-class="{active:route=='/team-stats'}">
-            <a href="#/team-stats">Team Stats</a>
+            <a ng-click="routeTo('/team-stats');" href="">Team Stats</a>
           </li>
 
           <li ng-show="user" ng-class="{active:route=='/player-stats'}">
-            <a href="#/player-stats">Player Stats</a>
+            <a ng-click="routeTo('/player-stats')" href="">Player Stats</a>
           </li>
         </ul>
       </li>
@@ -49,13 +49,13 @@
         <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
           <strong>{{user.firstName}} {{user.lastName}}</strong> <span class="caret"></span></a>
         <ul class="dropdown-menu" role="menu">
-          <li><a href="#/profile">My Profile</a></li>
-          <li><a ng-click="logout()">Logout</a></li>
+          <li><a ng-click="routeTo('/profile')" href="">My Profile</a></li>
+          <li><a ng-click="logout()" href="">Logout</a></li>
         </ul>
       </li>
 
       <li ng-hide="user" ng-class="{active:route=='/login'}" class="navbar-right">
-        <a href="#/login">Log In</a>
+        <a ng-click="routeTo('/login')" href="">Log In</a>
       </li>
     </ul>
   </div>

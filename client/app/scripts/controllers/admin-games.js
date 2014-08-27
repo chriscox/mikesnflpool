@@ -1,3 +1,4 @@
+/*global _:false */
 'use strict';
 
 /**
@@ -17,6 +18,7 @@ angular.module('clientApp')
     };
 
     $scope.getGames = function() {
+      $scope.games =[];
       dataService.getGames(function(games) {
         $scope.games = games;
       });
@@ -25,7 +27,7 @@ angular.module('clientApp')
     $scope.deleteGame = function(game) {
       dataService.deleteGame(game, function() {
         $scope.games = _.without($scope.games, game);
-      }, function(error) {
+      }, function() {
         game.hasError = true;
         $timeout(function() {
           game.hasError = false;
@@ -34,12 +36,11 @@ angular.module('clientApp')
     };
 
     $scope.addGame = function() {
-      console.log($scope.newGame)
       dataService.addGame($scope.newGame, function(game) {
         $scope.games.push(game);
         $scope.newGame.homeTeam = null;
         $scope.newGame.awayTeam = null;
-      }, function(error) {
+      }, function() {
         $scope.error = true;
         $timeout(function() {
           $scope.error = false;
@@ -48,8 +49,8 @@ angular.module('clientApp')
     };
 
     $scope.updateGame = function(game) {
-      dataService.updateGame(game, function(game) {
-      }, function(error) {
+      dataService.updateGame(game, function() {
+      }, function() {
       });
     };
 

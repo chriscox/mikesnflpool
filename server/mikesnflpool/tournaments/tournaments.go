@@ -55,7 +55,6 @@ func AddTournamentHandler(w http.ResponseWriter, r *http.Request) {
   // Add tournament
   key := datastore.NewIncompleteKey(c, "Tournament", nil)
   tournyKey, err := datastore.Put(c, key, &t); if err != nil {
-    c.Infof("%v", err)
     panic(err.Error)
   }
 
@@ -66,7 +65,6 @@ func AddTournamentHandler(w http.ResponseWriter, r *http.Request) {
     gameEvent.Week = i
     key := datastore.NewIncompleteKey(c, "GameEvent", tournyKey)
     if _, err := datastore.Put(c, key, &gameEvent); err != nil {
-      c.Infof("%v", err)
       panic(err.Error)
     }
   }
