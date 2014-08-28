@@ -211,7 +211,7 @@ angular.module('clientApp')
     // UserPicks
 
     var getUserPicks = function(user, callback, onError) {
-      Restangular.one('tournament', user.tournamentKey)
+      Restangular.one('tournament', authenticatedUser().tournamentKey)
       .one('season', getActiveSeason())
       .one('user', user.userKey)
       .all('userpicks').getList({
@@ -219,6 +219,7 @@ angular.module('clientApp')
       }).then(function(userPicks) {
         callback(userPicks);
       }, function(error) {
+        console.log(error)
         onError(error);
       });
     };

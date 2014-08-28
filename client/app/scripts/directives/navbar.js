@@ -62,7 +62,6 @@ angular.module('clientApp')
 
         scope.$on('isAdmin', function(event, admin) {
           scope.admin = dataService.adminUser();
-          // scope.admin = admin;
         });
       }
     };

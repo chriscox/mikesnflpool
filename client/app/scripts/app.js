@@ -60,12 +60,12 @@ angular
       })
       .when('/team-stats', {
         templateUrl: 'views/team-stats.html',
-        // controller: 'TeamStatsCtrl',
+        controller: 'TeamStatsCtrl',
         access: 'user'
       })
       .when('/player-stats', {
         templateUrl: 'views/player-stats.html',
-        // controller: 'PlayerStatsCtrl',
+        controller: 'PlayerStatsCtrl',
         access: 'user'
       })
       .when('/profile', {

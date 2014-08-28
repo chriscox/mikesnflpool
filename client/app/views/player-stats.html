@@ -1,0 +1,136 @@
+<div id="player-stats">
+
+  <div class="page-header">
+    <h3>{{user.firstName}} {{user.lastName | substring:1 }} <small>Player Stats</small></h3>
+     
+     <!-- view player -->
+    <div class="btn-group pull-right" dropdown>
+      <button type="button" class="btn btn-default btn-small btn-primary dropdown-toggle" data-toggle="dropdown">
+        View Player <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li ng-repeat="user in users" ng-click="setUser(user)">
+          <a>{{user.firstName}} {{user.lastName | substring:1 }}.</a>
+        </li>
+      </ul>
+    </div>
+
+     <div ng-show="(totalFinalGames > 0)">Record: (W-{{winsPerSeason}}, L-{{totalFinalGames - winsPerSeason}})</div>
+     <div>Place: </div>
+
+  </div>
+
+  <div class="clearfix"></div>
+
+  <!-- <div class="row well well-sm charts"> -->
+  <div class="row well charts">
+    <!-- <div class="col-sm-3"> -->
+      <nvd3-pie-chart
+        data="winsData"
+        id="winsChart"
+        margin="{left:0,top:0,bottom:0,right:0}"
+        width="150" height="150"
+        x="xFunction()"
+        y="yFunction()"
+        showLegend="true"
+        showLabels="true"
+        labelType="value"
+        pieLabelsOutside="true"
+        donutRatio=".4"
+        donut="true">
+        <svg></svg>
+      </nvd3-pie-chart>
+<!--     </div>
+    <div class="col-sm-3"> -->
+      <nvd3-pie-chart
+        data="homeData"
+        id="homeChart"
+        margin="{left:0,top:0,bottom:0,right:0}"
+        width="120" height="150"
+        x="xFunction()"
+        y="yFunction()"
+        showLegend="true"
+        showLabels="true"
+        labelType="value"
+        pieLabelsOutside="true"
+        donutRatio=".4"
+        donut="true">
+        <svg></svg>
+      </nvd3-pie-chart>
+<!--     </div>
+    <div class="col-sm-3"> -->
+      <nvd3-pie-chart
+        data="favoredData"
+        id="favoredChart"
+        margin="{left:0,top:0,bottom:0,right:0}"
+        width="150" height="150"
+        x="xFunction()"
+        y="yFunction()"
+        showLegend="true"
+        showLabels="true"
+        labelType="value"
+        pieLabelsOutside="true"
+        donutRatio=".4"
+        donut="true">
+        <svg></svg>
+      </nvd3-pie-chart>
+    <!-- </div> -->
+  </div>
+
+    <!-- week-selector directive -->
+  <!-- <div week-selector></div> -->
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-condensed">
+
+      <!-- Games grouped by week -->
+
+      <tbody ng-repeat="gamesByWeek in games">
+
+        <tr class="info">
+          <td colspan="6"><span>Week {{gamesByWeek[0].week}}</span></td>
+        </tr>
+        <tr>
+          <th>Game</th>
+          <th>Date</th>
+          <th>Teams</th>
+          <th>Scores</th>
+          <th>Spread</th>
+          <th>{{user.firstName}}'s Picks</th>
+        </tr>
+        
+        <tr ng-repeat="game in gamesByWeek" >
+          <td>{{$index+1}}</td>
+          <td>
+            <div class="gameDate">{{game.date | date:'shortDate'}}</div>
+          </td>
+          <td>
+            <a href="#/team-stats?team={{game.awayTeam.abbr}}">{{game.awayTeam.abbr}}</a>
+            <small class="text-muted">@</small>
+            <a href="#/team-stats?team={{game.homeTeam.abbr}}">{{game.homeTeam.abbr}}</a>
+          </td>
+          <td>
+            <div ng-show="game.ended">
+              {{game.awayScore}} - {{game.homeScore}}
+            </div>
+          </td>
+          <td>
+            <div ng-show="game.awaySpread > 0">{{game.awayTeam.abbr}} (+ {{game.awaySpread}})</div>
+            <div ng-show="game.homeSpread > 0">{{game.homeTeam.abbr}} (+ {{game.homeSpread}})</div>
+          </td>
+          <td>
+            <span ng-class="{true:'badge badge-success', false:''}[game.pick.results.spreadWin]">{{game.pick.team.abbr}}</span>
+          </td>
+        </tr>
+
+        <tr class="warning">
+          <td colspan="5"><span>Subtotal Week {{gamesByWeek[0].week}}</span></td>
+          <td>
+            <span>{{gamesByWeek.spreadWins}}</span>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>

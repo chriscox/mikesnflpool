@@ -24,7 +24,7 @@
             <tr ng-repeat="user in users">
               <td class="text-center">{{$index+1}}</td>
               <td class="text-center text-primary"><span class="badge badge-info"><small>{{user.place}}</small></span></td>
-              <td><a href="#/player-stats?userId={{user.id}}">{{user.firstName}} {{user.lastName | substring:1 }}</a></td>
+              <td><a href="#/player-stats?userKey={{user.userKey}}">{{user.firstName}} {{user.lastName | substring:1 }}</a></td>
               <td ng-repeat="n in [] | range:17" class="text-center">
                 <div ng-bind="user[n]"></div>
               </td>
@@ -52,7 +52,7 @@
           <tbody>
             <tr ng-repeat="user in realUsers">
               <td class="text-center">{{$index+1}}</td>
-              <td><a href="#/player-stats?userId={{user.id}}">{{user.firstName}} {{user.lastName | substring:1 }}</a></td>
+              <td><a href="#/player-stats?userKey={{user.userKey}}">{{user.firstName}} {{user.lastName | substring:1 }}</a></td>
               <td ng-repeat="n in [] | range:17" class="text-center">
                 <div ng-bind="user.moneyWins[n]"></div>
               </td>
