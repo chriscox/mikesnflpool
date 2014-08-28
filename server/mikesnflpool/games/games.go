@@ -58,7 +58,8 @@ func GameHandler(params martini.Params, w http.ResponseWriter, r *http.Request) 
   // Get games
   q = datastore.NewQuery("Game").
            Filter("Season =", season).
-           Filter("Week =", week)
+           Filter("Week =", week).
+           Order("Date")
   var games []Game
   gameKeys, err := q.GetAll(c, &games)
   if err != nil {
