@@ -11,7 +11,6 @@ import (
   "server/mikesnflpool/utils"
   "strconv"
   "time"
-  // "encoding/json"
 )
 
 type UserPick struct {
@@ -26,21 +25,12 @@ type UserPick struct {
   Week              int             `json:"week" datastore:"-"`
 }
 
-// type WeeklyWins struct {
-//   Week              int
-//   Wins              int
-// }
-
 type WeeklyWins     map[string]int
 type UserWins       map[string]WeeklyWins
 
 type StatsMap struct {
   Stats              UserWins      `json:"stats"`
- }
-
-// func NewWeeklyWins() *winsMap {
-//   return &winsMap{userKey: "", weeklyWins: make(map[string]int)}
-// }
+}
 
 func UserStatsHandler(params martini.Params, w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
@@ -56,16 +46,6 @@ func UserStatsHandler(params martini.Params, w http.ResponseWriter, r *http.Requ
   if err != nil {
     panic(err.Error)
   }
-
-  // Build array of user keys and get users
-  // var userKeys []*datastore.Key
-  // for i, _ := range tournamentUsers {
-  //   userKeys = append(userKeys, tournamentUsers[i].UserKey)
-  // }
-  // var users = make([]User, len(userKeys))
-  // if err := datastore.GetMulti(c, userKeys, users); err != nil {
-  //   panic(err.Error)
-  // }
 
   // Get all userpicks
   q = datastore.NewQuery("UserPick").Ancestor(tournamentKey)

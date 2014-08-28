@@ -156,6 +156,7 @@ angular.module('clientApp')
       }).then(function(user) {
         setUserCookie(user);
         $rootScope.$broadcast('isAuthenticated', true);
+        $rootScope.$broadcast('isAdmin', user.admin);
         callback(user);
       }, function(error) {
         onError(error);
@@ -165,11 +166,12 @@ angular.module('clientApp')
     var logout = function() {
       clearCookies();
       $rootScope.$broadcast('isAuthenticated', false);
+      $rootScope.$broadcast('isAdmin', false);
       $location.path('/login');
     };
 
     var isAuthenticated = function() {
-      return (getUserCookie() !== null && getUserCookie() !== undefined);
+      return (getUserCookie() != null && getUserCookie() != undefined);
     };
 
     var authenticatedUser = function() {
@@ -178,6 +180,16 @@ angular.module('clientApp')
       } else {
         return null;
       }
+    };
+
+    var adminUser = function() {
+      if (isAuthenticated()) {
+        var cookie = getUserCookie();
+        if ('admin' in cookie) {
+          return cookie.admin;
+        }
+      }
+      return false;
     };
 
     // Users
@@ -386,6 +398,7 @@ angular.module('clientApp')
       logout: logout,
       isAuthenticated: isAuthenticated,
       authenticatedUser: authenticatedUser,
+      adminUser: adminUser,
 
       getUsers: getUsers,
       getUserPicks: getUserPicks,

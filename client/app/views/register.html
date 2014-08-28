@@ -24,12 +24,12 @@
 
     <form ng-hide="hasSuccess" class="form-horizontal" role="form" ng-submit="register()">
 
-      <div class="form-group">
+<!--       <div class="form-group">
         <select ui-select2 ng-model="register.tournamentKey" data-placeholder="Select Tournament...">
             <option value=""></option>
             <option ng-repeat="t in tournaments" value="{{t.tournamentKey}}">{{t.name}}</option>
         </select>
-      </div>
+      </div> -->
 
       <div ng-repeat="field in user.fields" class="form-group" ng-class="{'has-error' : field.hasError}">
         <input type="{{field.type}}" class="form-control" id="{{field.id}}"  placeholder="{{field.name}}" ng-model='field.value' required ng-disabled="closed">

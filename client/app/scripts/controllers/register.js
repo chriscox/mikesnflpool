@@ -63,7 +63,8 @@ angular.module('clientApp')
 
     $scope.getTournaments = function() {
       dataService.getTournaments(function(tournaments) {
-        $scope.tournaments = tournaments;
+        // TODO: Update this to handle more than a single single tournament. 
+        $scope.tournamentKey = tournaments[0].tournamentKey;
       });
     };
 
@@ -97,7 +98,7 @@ angular.module('clientApp')
       // submit
       if (!$scope.hasError()) {
         dataService.register(
-          $scope.register.tournamentKey,
+          $scope.tournamentKey,
           firstName.value, 
           lastName.value, 
           email.value, 
@@ -105,6 +106,7 @@ angular.module('clientApp')
         function() {
           $scope.hasSuccess = true;
         }, function(error) {
+          console.log(error)
           if (error.status === 400) {
             email.hasError = true;
             $scope.errorText = error.data;

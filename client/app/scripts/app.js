@@ -102,10 +102,11 @@ angular
       // register listener to watch route changes
     $rootScope.$on('$routeChangeStart', function(event, next) {
       var isAuthenticated = dataService.isAuthenticated();
+      var isAdmin = dataService.adminUser();
       if (next.access === 'user' && !isAuthenticated) {
         // redirect
         $location.path('/login');
-      } else if (next.access === 'admin' && !isAuthenticated) {
+      } else if (next.access === 'admin' && !isAdmin) {
         // redirect
         $location.path('/login');
       }     

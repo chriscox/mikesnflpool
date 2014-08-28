@@ -5,7 +5,6 @@ import (
   "appengine/datastore"
   "net/http"
   "github.com/go-martini/martini"
-  // "server/mikesnflpool/user"
   "server/mikesnflpool/utils"
   "strconv"
 )
@@ -18,10 +17,10 @@ type Tournament struct {
 
 type TournamentUser struct {
   UserKey       *datastore.Key  `json:"userKey"`
+  Admin         bool            `json:"-"`
 }
 
 type GameEvent struct {
-  // TournamentKey *datastore.Key  `json:"tournament"`
   Season        int             `json:"season"`
   Week          int             `json:"week"`
 }

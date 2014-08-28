@@ -12,7 +12,7 @@ angular.module('clientApp')
       templateUrl: 'views/navbar.html',
       restrict: 'AE',
       replace: true,
-      link: function postLink(scope, element, attrs) {
+      link: function postLink(scope) {
 
         // scope.navItems = [
         //   {title:'Rules', url:'/rules'},
@@ -30,8 +30,8 @@ angular.module('clientApp')
         // Manually set route to keep the location.search value.
         // Otherwise controllers load twice for search '?week=X'
         scope.routeTo = function(route) {
-          $location.path(route)
-        }
+          $location.path(route);
+        };
 
         // watch route to determine active nav
         scope.$watch(function() {
@@ -42,6 +42,9 @@ angular.module('clientApp')
             angular.element('.navbar-toggle').click();
           }
           scope.route = newValue;
+
+          // Check if admin
+          scope.admin = dataService.adminUser();
         });
 
         scope.logout = function() {
@@ -55,6 +58,11 @@ angular.module('clientApp')
           } else {
             scope.user = null;
           }
+        });
+
+        scope.$on('isAdmin', function(event, admin) {
+          scope.admin = dataService.adminUser();
+          // scope.admin = admin;
         });
       }
     };
