@@ -6,32 +6,32 @@ api_version: go1
 handlers:
 - url: /api/.*
   script: _go_app
-  secure: always
+  # secure: always
 
 - url: /bower_components/*
   static_dir: client/dist/bower_components
-  secure: always
+  # secure: always
 
 - url: /images/*
   static_dir: client/dist/images
-  secure: always
+  # secure: always
 
 - url: /scripts/*
   static_dir: client/dist/scripts
-  secure: always
+  # secure: always
 
 - url: /styles/*
   static_dir: client/dist/styles
-  secure: always
+  # secure: always
 
 - url: /views/*
   static_dir: client/dist/views
-  secure: always
+  # secure: always
 
 - url: /.*
   static_files: client/dist/index.html
   upload: client/dist/index.html
-  secure: always
+  # secure: always
 
 skip_files:
   # - ^(.*/)?#.*#

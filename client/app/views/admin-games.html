@@ -94,11 +94,13 @@
           </td>
           <td class="editable-input">
             <div ng-show="!edit">{{game.awayTeamScore}}</div>
-            <input ng-show="edit" type="number" min="0" ng-model="game.awayTeamScore">
+            <input ng-show="edit" type="number" min="0" ng-model="game.awayTeamScore" 
+                   ng-change="updateGame(game)">
           </td>
           <td class="editable-input">
             <div ng-show="!edit">{{game.awayTeamSpread}}</div>
-            <input ng-show="edit" type="number" min="0" ng-model="game.awayTeamSpread">
+            <input ng-show="edit" type="number" min="0" ng-model="game.awayTeamSpread"
+                   ng-change="updateGame(game)">
           </td>
           <td>
             <div class="team-icon-small team-{{game.homeTeam.nickName}}">
@@ -106,18 +108,19 @@
           </td>
           <td class="editable-input">
             <div ng-show="!edit">{{game.homeTeamScore}}</div>
-            <input ng-show="edit" type="number" min="0" ng-model="game.homeTeamScore">
+            <input ng-show="edit" type="number" min="0" ng-model="game.homeTeamScore"
+                   ng-change="updateGame(game)">
           </td>
           <td class="editable-input">
             <div ng-show="!edit">{{game.homeTeamSpread}}</div>
-            <input ng-show="edit" type="number" min="0" ng-model="game.homeTeamSpread">
+            <input ng-show="edit" type="number" min="0" ng-model="game.homeTeamSpread"
+                   ng-change="updateGame(game)">
           </td>
-          <td><input type="checkbox" ng-model="game.ended" /></td>
+          <td>
+            <input type="checkbox" ng-model="game.ended" ng-change="updateGame(game)" />
+          </td>
           <td>
             <div>
-              <button type="button" class="btn btn-primary btn-sm" ng-click="updateGame(game)">
-                <span class="glyphicon glyphicon-save"></span>
-              </button>
               <button type="button" class="btn btn-danger btn-sm" ng-click="deleteGame(game)">
                 <span class="glyphicon glyphicon-trash"></span>
               </button>
