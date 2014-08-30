@@ -106,7 +106,6 @@ angular.module('clientApp')
         function() {
           $scope.hasSuccess = true;
         }, function(error) {
-          console.log(error)
           if (error.status === 400) {
             email.hasError = true;
             $scope.errorText = error.data;

@@ -175,7 +175,6 @@ func AllUserPickHandler(params martini.Params, w http.ResponseWriter, r *http.Re
     teamKey := allPicks[iter1].TeamKey
     for _, t := range teams {
       if teamKey.Equal(t.TeamKey) {
-        c.Infof("ok good")
         allPicks[iter1].Team = t
         break
       }
@@ -257,6 +256,7 @@ func AddUserPickHandler(w http.ResponseWriter, r *http.Request) {
   // Set picked team
   game := p.Game
   p.GameKey = game.GameKey
+  p.Date = time.Now()
   if game.AwayTeam.Selected {
     p.TeamKey = game.AwayTeamKey
   } else if game.HomeTeam.Selected {
@@ -284,6 +284,7 @@ func AddUserPickHandler(w http.ResponseWriter, r *http.Request) {
   if len(existingPicks) == 1 {
     // Update existing pick
     existingPicks[0].TeamKey = p.TeamKey
+    existingPicks[0].Date = time.Now()
     if _, err := datastore.Put(c, existingPicksKeys[0], &existingPicks[0]); err != nil {
       panic(err.Error)
     }
