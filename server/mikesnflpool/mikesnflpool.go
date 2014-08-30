@@ -6,6 +6,7 @@ import (
   "github.com/martini-contrib/cors"
   "server/mikesnflpool/games"
   "server/mikesnflpool/teams"
+  // "server/mikesnflpool/teamstandings"
   "server/mikesnflpool/tournaments"
   "server/mikesnflpool/user"
   "server/mikesnflpool/userpicks"
@@ -17,11 +18,12 @@ func init() {
   m.Get("/api/season/:s/games", games.GameHandler)
   // TODO: Convert this to a DELETE instead of POST
   //m.Delete("/api/games/:g", games.DeleteGameHandler)
-  m.Post("/api/deletegame/:g", games.DeleteGameHandler)
+  m.Post("/api/season/:s/week/:w/deletegame/:g", games.DeleteGameHandler)
   m.Post("/api/games", games.AddOrUpdateGameHandler)
   
   // Teams
   m.Get("/api/teams", teams.TeamHandler)
+  // m.Get("/api/season/:s/teams/:t/standings", teamsstandings.TeamStandingsHandler)
 
   // User
   m.Get("/api/tournament/:t/users", user.UserHandler)

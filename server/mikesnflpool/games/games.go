@@ -3,13 +3,13 @@ package games
 import (
   "appengine"
   "appengine/datastore"
+  "appengine/memcache"
   "net/http"
-
-  "time"
   "github.com/go-martini/martini"
   "server/mikesnflpool/teams"
   "server/mikesnflpool/utils"
   "strconv"
+  "time"
 )
 
 type Tournament struct {
@@ -42,26 +42,56 @@ type Game struct {
   HomeTeamSpread  float32         `json:"homeTeamSpread"`
 }
 
+func getCacheKey(season int, week int) string {
+  return "games" + strconv.Itoa(season) + strconv.Itoa(week)
+}
+
+func GetGames(season int, week int, c appengine.Context) (games []Game, err error) {
+  var cachedGames []Game
+  var cacheKey = getCacheKey(season, week)
+  if _, err := memcache.JSON.Get(c, cacheKey, &cachedGames); err != nil {
+    // Not in cache, so fetch item
+    var games []Game
+    q := datastore.NewQuery("Game").
+           Filter("Season =", season).
+           Filter("Week =", week).
+           Order("Date")
+    keys, err := q.GetAll(c, &games)
+    if err != nil {
+      panic(err.Error)
+    }
+
+    for i, _ := range games {
+      games[i].GameKey = keys[i]
+    }
+
+    // Add to memcache
+    item := &memcache.Item {
+       Key: cacheKey,
+       Object: games,
+    }   
+    err = memcache.JSON.Add(c, item)
+    return games, nil
+  } else {
+    // Found in cache
+    c.Infof("Games successfully retrieved from cache.")
+    return cachedGames, nil
+  }
+}
+
 func GameHandler(params martini.Params, w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
   season,_ := strconv.Atoi(params["s"])
   week,_ := strconv.Atoi(r.URL.Query().Get("week"))
 
   // Get teams
-  q := datastore.NewQuery("Team")
-  var allTeams []teams.Team
-  teamKeys, err := q.GetAll(c, &allTeams)
+  teams, err := teams.GetTeams(c)
   if err != nil {
     panic(err.Error)
   }
 
   // Get games
-  q = datastore.NewQuery("Game").
-           Filter("Season =", season).
-           Filter("Week =", week).
-           Order("Date")
-  var games []Game
-  gameKeys, err := q.GetAll(c, &games)
+  games, err := GetGames(season, week, c)
   if err != nil {
     panic(err.Error)
   }
@@ -69,14 +99,14 @@ func GameHandler(params martini.Params, w http.ResponseWriter, r *http.Request) 
   // Associate team with game
   for i := range games {
     game := &games[i]
-    game.GameKey = gameKeys[i]
-    for j, teamKey := range teamKeys {
-      if game.AwayTeamKey.Equal(teamKey) {
-        game.AwayTeam = allTeams[j]
+    // game.GameKey = gameKeys[i]
+    for j, t := range teams {
+      if game.AwayTeamKey.Equal(t.TeamKey) {
+        game.AwayTeam = teams[j]
         continue
       }
-      if game.HomeTeamKey.Equal(teamKey) {
-        game.HomeTeam = allTeams[j]
+      if game.HomeTeamKey.Equal(t.TeamKey) {
+        game.HomeTeam = teams[j]
         continue
       }
     }
@@ -97,24 +127,25 @@ func AddOrUpdateGameHandler(w http.ResponseWriter, r *http.Request) {
   g.HomeTeamKey = datastore.NewKey(c, "Team", g.HomeTeamAbbr, 0, nil)
 
   // Get teams
-  q := datastore.NewQuery("Team")
-  var allTeams []teams.Team
-  teamKeys, err := q.GetAll(c, &allTeams)
+  teams, err := teams.GetTeams(c)
   if err != nil {
     panic(err.Error)
   }
 
   // Associate team with game
-  for j, teamKey := range teamKeys {
-    if g.AwayTeamKey.Equal(teamKey) {
-      g.AwayTeam = allTeams[j]
+  for i, t := range teams {
+    if g.AwayTeamKey.Equal(t.TeamKey) {
+      g.AwayTeam = teams[i]
       continue
     }
-    if g.HomeTeamKey.Equal(teamKey) {
-      g.HomeTeam = allTeams[j]
+    if g.HomeTeamKey.Equal(t.TeamKey) {
+      g.HomeTeam = teams[i]
       continue
     }
   }
+
+  // Clear games cache
+  memcache.Delete(c, getCacheKey(g.Season, g.Week))
 
   // Check if existing game
   var existingGame Game
@@ -145,6 +176,8 @@ func AddOrUpdateGameHandler(w http.ResponseWriter, r *http.Request) {
 
 func DeleteGameHandler(params martini.Params, w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
+  season,_ := strconv.Atoi(params["s"])
+  week,_ := strconv.Atoi(params["w"])
   gameKey, err := datastore.DecodeKey(params["g"])
   if err != nil {
     panic(err.Error)
@@ -156,6 +189,9 @@ func DeleteGameHandler(params martini.Params, w http.ResponseWriter, r *http.Req
   if err != nil {
     panic(err.Error)
   }
+
+  // Clear games cache
+  memcache.Delete(c, getCacheKey(season, week))
 
   // Delete keys
   keys = append(keys, gameKey)

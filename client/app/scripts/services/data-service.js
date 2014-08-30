@@ -219,7 +219,6 @@ angular.module('clientApp')
       }).then(function(userPicks) {
         callback(userPicks);
       }, function(error) {
-        console.log(error)
         onError(error);
       });
     };
@@ -278,10 +277,11 @@ angular.module('clientApp')
     var getTeamStandings = function(teamAbbr, summarize, callback) {
       Restangular.one('season', getActiveSeason())
         .one('teams', teamAbbr)
-        .all('standings').getList({
+        .one('standings').get({
           week: (summarize) ? 17 : getActiveWeek()
         }).then(function(standings) {
           callback(standings);
+        }, function(error) {
         });
     };
 
@@ -308,14 +308,16 @@ angular.module('clientApp')
       // Restangular.one('games', game.gameKey).remove().then(function() {
       //   callback();
       // }, function(error) {
-      //   console.log(error)
       //   onError(error);
       // });
-      Restangular.one('deletegame', game.gameKey).post().then(function() {
-        callback();
-      }, function(error) {
-        onError(error);
-      });
+      Restangular.one('season', getActiveSeason())
+        .one('week', getActiveWeek())
+        .one('deletegame', game.gameKey).post()
+        .then(function() {
+          callback();
+        }, function(error) {
+          onError(error);
+        });
     };
 
     var addGame = function(game, callback, onError) {

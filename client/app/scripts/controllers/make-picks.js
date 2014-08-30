@@ -21,7 +21,7 @@ angular.module('clientApp')
 
     $scope.pickCount = 0;
     $scope.user = dataService.authenticatedUser();
-    // $scope.robot = ($scope.user.firstName.substring(0, 2) === "[ ");
+    $scope.robot = ($scope.user.firstName.substring(0, 2) === "[ ");
 
     $scope.getGames = function() {
       dataService.getGames(function(games) {
@@ -32,7 +32,7 @@ angular.module('clientApp')
 
     $scope.getTeamStandings = function() {
       dataService.getTeamStandings('ALL', false, function(teamStandings) {
-        $scope.teamStandings = teamStandings;
+        $scope.teamStandings = teamStandings.stats;
       });
     };
 

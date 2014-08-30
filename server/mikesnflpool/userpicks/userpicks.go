@@ -141,15 +141,13 @@ func AllUserPickHandler(params martini.Params, w http.ResponseWriter, r *http.Re
   week,_ := strconv.Atoi(r.URL.Query().Get("week"))
 
   // Get all teams
-  var teams []teams.Team
-  q := datastore.NewQuery("Team")
-  teamKeys, err := q.GetAll(c, &teams)
+  teams, err := teams.GetTeams(c)
   if err != nil {
     panic(err.Error)
   }
 
   // Get GameEvents ancestor for this season/week
-  q = datastore.NewQuery("GameEvent").Ancestor(tournamentKey)
+  q := datastore.NewQuery("GameEvent").Ancestor(tournamentKey)
   var gameEvents []tournaments.GameEvent
   var gameEventKeyAncestor *datastore.Key
   gameEventKeys, err := q.GetAll(c, &gameEvents)
@@ -175,8 +173,9 @@ func AllUserPickHandler(params martini.Params, w http.ResponseWriter, r *http.Re
     gameKeys = append(gameKeys, pick.GameKey)
     // Associate teams with picks
     teamKey := allPicks[iter1].TeamKey
-    for iter2, t := range teams {
-      if teamKey.Equal(teamKeys[iter2]) {
+    for _, t := range teams {
+      if teamKey.Equal(t.TeamKey) {
+        c.Infof("ok good")
         allPicks[iter1].Team = t
         break
       }
