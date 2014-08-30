@@ -22,7 +22,75 @@
   <div class="clearfix"></div>
   <div class="text-info" ng-show="games">You've made <strong>{{pickCount}}</strong> of <strong>{{games.length}}</strong> game picks.</div>
 
-  <div class="table-responsive">
+  <!-- Mobile device -->
+
+  <div class="visible-xs container" style="padding:20px 0; margin:0">
+    <hr/>
+    <div class="row" style="padding:2px 15px; text-align:center;"> 
+      <h5 class="col-xs-6">Away Team</h5>
+      <h5 class="col-xs-6">Home Team</h5>
+    </div>
+    <div class="row" ng-repeat="game in games" style="padding:2px 0;">
+      <div class="btn-group col-xs-12" data-toggle="buttons">
+        <label class="btn btn-primary btn-large col-xs-6" 
+               ng-class="{true:'active', false:''}[game.awayTeam.selected]" ng-click="selectTeam(game, 'away')">
+          <table>
+            <tr>
+              <td class="team-icon-small team-{{game.awayTeam.nickName}}">
+              </td>
+              <td style="text-align:left; line-height:15px;">
+                <span>
+                  <input class="radio" type="radio" name="options-{{$index}}" id="{{game.awayTeam.teamKey}}">
+                         {{game.awayTeam.nickName}}
+                </span>
+                <br/>
+                <small><small><small>
+                  (W-{{teamStandings[game.awayTeam.abbr].total.wins}},
+                   L-{{teamStandings[game.awayTeam.abbr].total.losses}},
+                   T-{{teamStandings[game.awayTeam.abbr].total.ties}})
+                </small></small></small>      
+              </td>
+              <td style="width:100%; text-align:right;">
+                <div class="badge" ng-show="game.awayTeamSpread > 0" style="text-align:right">
+                  <small>+ {{game.awayTeamSpread}}</small>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </label>
+
+        <label class="btn btn-primary btn-large col-xs-6"
+               ng-class="{true:'active', false:''}[game.homeTeam.selected]" ng-click="selectTeam(game, 'home')">
+          <table>
+            <tr>
+              <td class="team-icon-small team-{{game.homeTeam.nickName}}">
+              </td>
+              <td style="text-align:left; line-height:15px;">
+                <span>
+                  <input class="radio" type="radio" name="options-{{$index}}" id="{{game.homeTeam.teamKey}}">
+                         {{game.homeTeam.nickName}}
+                </span>
+                <br/>
+                <small><small><small>
+                  (W-{{teamStandings[game.homeTeam.abbr].total.wins}},
+                   L-{{teamStandings[game.homeTeam.abbr].total.losses}},
+                   T-{{teamStandings[game.homeTeam.abbr].total.ties}})
+                </small></small></small>  
+              </td>
+              <td style="width:100%; text-align:right;">
+                <div class="badge" ng-show="game.homeTeamSpread > 0" style="text-align:right">
+                  <small>+ {{game.homeTeamSpread}}</small>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </label>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="hidden-xs table-responsive">
     <table class="table table-striped table-bordered">
       <thead>
         <tr>
@@ -58,7 +126,7 @@
             </div>
           </td>
           <td class="team-spread">
-            <div ng-show="game.awayTeamSpread > 0"><small>+ </small>{{game.awayTeamSpread}}</div>
+            <div class="badge" ng-show="game.awayTeamSpread > 0"><small>+ </small>{{game.awayTeamSpread}}</div>
           </td>
           <td class="team-selector">
             <div>
@@ -88,13 +156,12 @@
             </div>
           </td>
           <td class="team-spread">
-            <div ng-show="game.homeTeamSpread > 0"><small>+ </small>{{game.homeTeamSpread}}</div>
+            <div class="badge" ng-show="game.homeTeamSpread > 0"><small>+ </small>{{game.homeTeamSpread}}</div>
           </td>
           <td class="team-selector">
             <div>
               <button ng-hide="!robot && (game.homeTeam.selected || game.started || game.ended)" ng-class="{true:'btn btn-primary btn-sm', false:''}[!game.homeTeam.selected]" ng-click="selectTeam(game, 'home')"> Pick Team
               </button>
-              <!-- <span ng-show="game.homeTeam.selected"><i class="icon-ok"></i> Picked</span> -->
               <span ng-show="game.homeTeam.selected">
                 <i class="glyphicon glyphicon-ok"> Picked</i>
               </span>

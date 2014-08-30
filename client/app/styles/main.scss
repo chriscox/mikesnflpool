@@ -65,6 +65,7 @@ body {
   .team-cell { border-right: none; border-left:none; }
   .team-spread { border-right: none; border-left: none; color:$redColor; min-width:40px; }
   .team-selector { width:70px; border-left:none; }
+  input.radio[type="radio"]{ display:none; }
 }
 
 #user-picks {
