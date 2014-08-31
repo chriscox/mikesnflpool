@@ -32,8 +32,9 @@
     </div>
     <div class="row" ng-repeat="game in games" style="padding:8px 0;">
       <div class="btn-group col-xs-12" data-toggle="buttons">
-        <label class="btn btn-default btn-large col-xs-6" 
-               ng-class="{true:'active', false:''}[game.awayTeam.selected]" ng-mouseup="selectTeam(game, 'away')">
+        <button class="btn btn-default btn-large col-xs-6" 
+               ng-class="{active:game.awayTeam.selected, disabled:game.started || game.ended}"
+               ng-mousedown="selectTeam(game, 'away')">
           <table>
             <tr>
               <td class="team-icon-small team-{{game.awayTeam.nickName}}">
@@ -57,10 +58,11 @@
               </td>
             </tr>
           </table>
-        </label>
+        </button>
 
-        <label class="btn btn-default btn-large col-xs-6"
-               ng-class="{true:'active', false:''}[game.homeTeam.selected]" ng-mouseup="selectTeam(game, 'home')">
+        <button class="btn btn-default btn-large col-xs-6"
+               ng-class="{active:game.homeTeam.selected, disabled:game.started || game.ended}"
+               ng-mousedown="selectTeam(game, 'home')">
           <table>
             <tr>
               <td class="team-icon-small team-{{game.homeTeam.nickName}}">
@@ -84,8 +86,10 @@
               </td>
             </tr>
           </table>
-        </label>
+        </button>
 
+        <!-- Locked games -->
+        <div ng-show="game.started || game.ended" class="centerLock danger"></div>
       </div>
     </div>
   </div>
