@@ -30,9 +30,9 @@
       <h5 class="col-xs-6">Away Team</h5>
       <h5 class="col-xs-6">Home Team</h5>
     </div>
-    <div class="row" ng-repeat="game in games" style="padding:2px 0;">
+    <div class="row" ng-repeat="game in games" style="padding:8px 0;">
       <div class="btn-group col-xs-12" data-toggle="buttons">
-        <label class="btn btn-primary btn-large col-xs-6" 
+        <label class="btn btn-default btn-large col-xs-6" 
                ng-class="{true:'active', false:''}[game.awayTeam.selected]" ng-mouseup="selectTeam(game, 'away')">
           <table>
             <tr>
@@ -59,7 +59,7 @@
           </table>
         </label>
 
-        <label class="btn btn-primary btn-large col-xs-6"
+        <label class="btn btn-default btn-large col-xs-6"
                ng-class="{true:'active', false:''}[game.homeTeam.selected]" ng-mouseup="selectTeam(game, 'home')">
           <table>
             <tr>
