@@ -84,6 +84,11 @@ angular
         controller: 'AdminTeamsCtrl',
         access: 'admin'
       })
+      .when('/admin/bots', {
+        templateUrl: 'views/admin-bots.html',
+        controller: 'AdminBotsCtrl',
+        access: 'admin'
+      })
       .when('/admin/tournaments', {
         templateUrl: 'views/admin-tournaments.html',
         controller: 'AdminTournamentsCtrl'

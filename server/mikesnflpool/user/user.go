@@ -20,6 +20,8 @@ type User struct {
   UserKey         *datastore.Key    `json:"userKey" datastore:"-"`
   TournamentKey   *datastore.Key    `json:"tournamentKey" datastore:"-"`
   Admin           bool              `json:"admin,omitempty" datastore:"-"`
+  Bot             bool              `json:"bot,omitempty"`
+  BotType         string            `json:"botType,omitempty"`
 }
 
 /*--- User Auth ---*/
@@ -116,6 +118,53 @@ func UserRegistrationHandler(w http.ResponseWriter, r *http.Request) {
   u.TournamentKey = tourneyKey.Parent()
   utils.ServeJson(w, &u)
 }
+
+// func BotRegistrationHandler(w http.ResponseWriter, r *http.Request) {
+//   c := appengine.NewContext(r)
+//   var u User
+//   if err := utils.ReadJson(r, &u); err != nil {
+//     panic(err.Error)
+//   }
+
+//   // Create new user or quit if existing
+//   key := datastore.NewKey(c, "User", u.Email, 0, nil)
+//   if err := datastore.Get(c, key, &u); err == nil {
+//     w.WriteHeader(400)
+//     w.Write([]byte("A user with this email already exists."))
+//     return
+//   } 
+
+//   // Encrypt password
+//   ctext, err := Encrypt(u.Password)
+//   if err != nil {
+//     panic(err.Error)
+//   }
+//   u.SecurePassword = ctext
+
+//   // Save user
+//   userKey, err := datastore.Put(c, key, &u)
+//   if err != nil {
+//     panic(err.Error)
+//   }
+
+//   // Add Tournament User
+//   var t tournaments.TournamentUser
+//   t.UserKey = userKey
+//   key = datastore.NewIncompleteKey(c, "TournamentUser", u.TournamentKey)
+//   tourneyKey, err := datastore.Put(c, key, &t)
+//   if err != nil {
+//     panic(err.Error)
+//   }
+
+//   // IMPORTANT: clear passwords
+//   u.Password = "" 
+//   u.SecurePassword = nil
+
+//   // Send authenticated user
+//   u.UserKey = userKey
+//   u.TournamentKey = tourneyKey.Parent()
+//   utils.ServeJson(w, &u)
+// }
 
 func UserHandler(parms martini.Params, w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)

@@ -1,0 +1,48 @@
+<div id="admin-bots">
+
+  <div class="page-header">
+    <h3>Admin: Bots</h3>
+  </div>
+
+  <!-- week-selector directive -->
+  <div week-selector></div>
+
+  <div class="clearfix"></div>
+
+   <div class="well">
+    <form ng-submit="addBot()" class="form-inline" role="form">
+      <fieldset>
+        <input  ng-model="botName" class="form-control"
+                id="botName" placeholder="Bot Name">
+        <div class="form-group">
+          <select ui-select2 ng-model="botType" data-placeholder="Select Bot Type...">
+            <option value=""></option>
+            <option ng-repeat="item in botTypes" value="{{item.type}}">{{item.type}}</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Add Bot</button>
+        <button ng-disabled="buttonDisabled" class="btn btn-primary btn-sm pull-right" ng-click="makeBotPicks();">Record Bot Picks</button>
+      </fieldset>
+    </form>
+
+  </div>
+
+  <div class="table-responsive">
+    <table class="table  table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Bot Name</th>
+          <th>Bot Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="bot in bots">
+          <td><div>{{$index + 1}}</div></td>
+          <td><div>{{bot.firstName}}</div></td>
+          <td><div>{{bot.botType}}</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

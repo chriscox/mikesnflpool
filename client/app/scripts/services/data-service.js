@@ -117,6 +117,35 @@ angular.module('clientApp')
       }
     };
 
+    // Bots
+
+    var registerBot = function(tournamentKey, firstName, botType, callback, onError) {
+      Restangular.all('auth').post({
+        tournamentKey:tournamentKey,
+        firstName:firstName,
+        email:botType,
+        botType:botType,
+        bot:true,
+      }).then(function(user) {
+        _users = null;
+        callback(user);
+      }, function(error) {
+        onError(error);
+      });
+    };
+
+    var getBots = function(callback) {
+      Restangular.one('tournament', authenticatedUser().tournamentKey)
+      .all('users').getList().then(function(users) {
+        var botUsers = _.filter(users, function(u) {
+          return u.bot;
+        });
+        return callback(botUsers);
+      }, function(error) {
+        parseError(error);
+      });
+    };
+
     // Register
 
     var register = function(tournamentKey, firstName, lastName, email, password, callback, onError) {
@@ -395,6 +424,9 @@ angular.module('clientApp')
 
       getActiveWeek: getActiveWeek,
       getCurrentWeek: getCurrentWeek,
+
+      registerBot: registerBot,
+      getBots: getBots,
 
       register: register,
       login: login,
