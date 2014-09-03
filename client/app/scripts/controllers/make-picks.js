@@ -27,12 +27,24 @@ angular.module('clientApp')
       dataService.getGames(function(games) {
         $scope.games = games;
         $scope.render();
+        // $scope.getTeamStandings();
       });
     };
 
     $scope.getTeamStandings = function() {
       dataService.getTeamStandings('ALL', false, function(teamStandings) {
-        $scope.teamStandings = teamStandings.stats;
+        console.log(teamStandings)
+        _.each($scope.games, function(game) {
+          for (var i = 0; i < teamStandings.length; i++) {
+            var standing = teamStandings[i];
+            if (game.awayTeam.teamKey === standing.teamKey) {
+              game.awayTeam.standings = standing.total
+            }
+            if (game.homeTeam.teamKey === standing.teamKey) {
+              game.homeTeam.standings = standing.total
+            }
+          }
+        });
       });
     };
 

@@ -46,9 +46,9 @@
                 </span>
                 <br/>
                 <small><small><small>
-                  (W-{{teamStandings[game.awayTeam.abbr].total.wins}},
-                   L-{{teamStandings[game.awayTeam.abbr].total.losses}},
-                   T-{{teamStandings[game.awayTeam.abbr].total.ties}})
+                  (W-{{game.awayTeam.standings.wins}},
+                   L-{{game.awayTeam.standings.losses}},
+                   T-{{game.awayTeam.standings.ties}})
                 </small></small></small>      
               </td>
               <td style="width:100%; text-align:right;">
@@ -74,9 +74,9 @@
                 </span>
                 <br/>
                 <small><small><small>
-                  (W-{{teamStandings[game.homeTeam.abbr].total.wins}},
-                   L-{{teamStandings[game.homeTeam.abbr].total.losses}},
-                   T-{{teamStandings[game.homeTeam.abbr].total.ties}})
+                  (W-{{game.homeTeam.standings.wins}},
+                   L-{{game.homeTeam.standings.losses}},
+                   T-{{game.homeTeam.standings.ties}})
                 </small></small></small>  
               </td>
               <td style="width:100%; text-align:right;">
@@ -122,11 +122,11 @@
               <a href="#/team-stats?team={{game.awayTeam.abbr}}">{{game.awayTeam.name}}</a>
             </div>
             <div class="team-standings">
-              <small>
-              (W-{{teamStandings[game.awayTeam.abbr].total.wins}},
-               L-{{teamStandings[game.awayTeam.abbr].total.losses}},
-               T-{{teamStandings[game.awayTeam.abbr].total.ties}})
-               </small>
+              <small><small>
+              (W-{{game.awayTeam.standings.wins}},
+               L-{{game.awayTeam.standings.losses}},
+               T-{{game.awayTeam.standings.ties}})
+              </small></small>
             </div>
           </td>
           <td class="team-spread">
@@ -152,11 +152,11 @@
               <a href="#/team-stats?team={{game.homeTeam.abbr}}">{{game.homeTeam.name}}</a>
             </div>
             <div class="team-standings">
-              <small>
-              (W-{{teamStandings[game.homeTeam.abbr].total.wins}},
-               L-{{teamStandings[game.homeTeam.abbr].total.losses}},
-               T-{{teamStandings[game.homeTeam.abbr].total.ties}})
-               </small>       
+              <small><small>
+              (W-{{game.homeTeam.standings.wins}},
+               L-{{game.homeTeam.standings.losses}},
+               T-{{game.homeTeam.standings.ties}})
+              </small></small>     
             </div>
           </td>
           <td class="team-spread">

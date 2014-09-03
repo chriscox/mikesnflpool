@@ -277,7 +277,7 @@ angular.module('clientApp')
     var getTeamStandings = function(teamAbbr, summarize, callback) {
       Restangular.one('season', getActiveSeason())
         .one('teams', teamAbbr)
-        .one('standings').get({
+        .all('standings').getList({
           week: (summarize) ? 17 : getActiveWeek()
         }).then(function(standings) {
           callback(standings);

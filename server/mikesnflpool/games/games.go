@@ -99,7 +99,6 @@ func GameHandler(params martini.Params, w http.ResponseWriter, r *http.Request) 
   // Associate team with game
   for i := range games {
     game := &games[i]
-    // game.GameKey = gameKeys[i]
     for j, t := range teams {
       if game.AwayTeamKey.Equal(t.TeamKey) {
         game.AwayTeam = teams[j]

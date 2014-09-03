@@ -6,7 +6,7 @@ import (
   "github.com/martini-contrib/cors"
   "server/mikesnflpool/games"
   "server/mikesnflpool/teams"
-  // "server/mikesnflpool/teamstandings"
+  "server/mikesnflpool/teamstandings"
   "server/mikesnflpool/tournaments"
   "server/mikesnflpool/user"
   "server/mikesnflpool/userpicks"
@@ -23,7 +23,7 @@ func init() {
   
   // Teams
   m.Get("/api/teams", teams.TeamHandler)
-  // m.Get("/api/season/:s/teams/:t/standings", teamsstandings.TeamStandingsHandler)
+  m.Get("/api/season/:s/teams/:t/standings", teamstandings.TeamStandingsHandler)
 
   // User
   m.Get("/api/tournament/:t/users", user.UserHandler)

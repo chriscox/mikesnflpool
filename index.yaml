@@ -15,3 +15,8 @@ indexes:
   - name: Season
   - name: Week
   - name: Date
+
+- kind: TeamStandings
+  properties:
+  - name: Season
+  - name: Week
