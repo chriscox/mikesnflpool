@@ -10,7 +10,7 @@
  */
 angular.module('clientApp')
   .controller('RegisterCtrl', function ($scope, dataService) {
-    $scope.closed = false;
+    $scope.closed = true;
     $scope.user = {
       'fields': [
         {
