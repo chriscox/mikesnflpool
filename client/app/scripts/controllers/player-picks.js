@@ -11,6 +11,8 @@
 angular.module('clientApp')
   .controller('PlayerPicksCtrl', function ($scope, dataService, utils) {
     var _users = null;
+    var _games = null;
+
     $scope.getUsers = function() {
       dataService.getUsers(function(users) {
         _.each(users, function(u) {
@@ -23,7 +25,8 @@ angular.module('clientApp')
 
     $scope.getGames = function() {
       dataService.getGames(function(games) {
-        $scope.games = games;
+        _games = games;
+        $scope.render();
       });
     };
 
@@ -58,11 +61,15 @@ angular.module('clientApp')
         });
       }
 
-      // sort by firstName then wins
-      $scope.users = _.chain(_users)
-        .sortBy(function(u) { return u.firstName; })
-        .sortBy(function(u) { return -u.wins; })
-        .value();
+      if (_users && _games) {
+        $scope.games = _games;
+
+        // sort by firstName then wins
+        $scope.users = _.chain(_users)
+          .sortBy(function(u) { return u.firstName; })
+          .sortBy(function(u) { return -u.wins; })
+          .value();
+      }
     };
 
     $scope.getUsers();
