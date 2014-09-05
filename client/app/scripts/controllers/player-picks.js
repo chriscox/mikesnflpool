@@ -10,12 +10,13 @@
  */
 angular.module('clientApp')
   .controller('PlayerPicksCtrl', function ($scope, dataService, utils) {
+    var _users = null;
     $scope.getUsers = function() {
       dataService.getUsers(function(users) {
         _.each(users, function(u) {
           u.wins = 0;
         });
-        $scope.users = users;
+        _users = users;
         $scope.render();
       });
     };
@@ -36,7 +37,7 @@ angular.module('clientApp')
 
     $scope.render = function() {
       // For each user pick, update user wins
-      if ($scope.users && $scope.userPicks) {
+      if (_users && $scope.userPicks) {
 
         _.each($scope.userPicks, function(userPick) {
           userPick.team.teamKey = userPick.teamKey;
@@ -45,7 +46,7 @@ angular.module('clientApp')
           data.abbr = userPick.team.abbr;
 
           // get this user
-          var thisUser = _.find($scope.users, function(u) {
+          var thisUser = _.find(_users, function(u) {
             return (userPick.userKey === u.userKey);
           });
 
@@ -55,14 +56,13 @@ angular.module('clientApp')
           }
           thisUser[userPick.gameKey] = data;
         });
-
-        // sort by firstName then wins
-        $scope.users = _.chain($scope.users)
-          .sortBy(function(u) { return u.firstName; })
-          .sortBy(function(u) { return -u.wins; })
-          .value();
-          
       }
+
+      // sort by firstName then wins
+      $scope.users = _.chain(_users)
+        .sortBy(function(u) { return u.firstName; })
+        .sortBy(function(u) { return -u.wins; })
+        .value();
     };
 
     $scope.getUsers();
