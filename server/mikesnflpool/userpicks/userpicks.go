@@ -231,7 +231,7 @@ func UserPickHandler(params martini.Params, w http.ResponseWriter, r *http.Reque
 
   // Get all pick for this game event ancestor
   var allPicks []UserPick
-  var filteredPicks []UserPick
+  filteredPicks := make([]UserPick, 0)
   q = datastore.NewQuery("UserPick").Ancestor(gameEventKeyAncestor)
   if _, err := q.GetAll(c, &allPicks); err != nil {
     panic(err.Error)

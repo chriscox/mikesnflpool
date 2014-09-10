@@ -45,9 +45,9 @@
     </div>
     <div class="row" ng-repeat="game in games" style="padding:8px 0;">
       <div class="btn-group col-xs-12" data-toggle="buttons">
-        <button class="btn btn-default btn-large col-xs-6" 
-               ng-class="{active:game.awayTeam.selected, disabled:game.started || game.ended}"
-               ng-mousedown="selectTeam(game, 'away')">
+        <button class="btn btn-default btn-large col-xs-6"
+                ng-class="{active:game.awayTeam.selected}"
+                ng-mousedown="selectTeam(game, 'away')">
           <table>
             <tr>
               <td class="team-icon-small team-{{game.awayTeam.nickName}}">
@@ -74,7 +74,7 @@
         </button>
 
         <button class="btn btn-default btn-large col-xs-6"
-               ng-class="{active:game.homeTeam.selected, disabled:game.started || game.ended}"
+               ng-class="{active:game.homeTeam.selected}"
                ng-mousedown="selectTeam(game, 'home')">
           <table>
             <tr>
@@ -100,12 +100,11 @@
             </tr>
           </table>
         </button>
-
-        <!-- Locked games -->
-        <div ng-show="game.started || game.ended" class="centerLock danger"></div>
       </div>
     </div>
   </div>
+
+  <!-- Desktop -->
 
   <div class="hidden-xs table-responsive">
     <table class="table table-striped table-bordered">
@@ -119,7 +118,7 @@
       </thead>
       <tbody>
         <tr ng-repeat="game in games">
-          <td><div class="game-index" ng-class="{locked:game.started || game.ended}">{{$index+1}}</div></td>
+          <td><div class="game-index">{{$index+1}}</div></td>
           <td>
             <div class="gameDate"><small>{{game.date | date:'EEE, MMM d, y'}}</small></div>
             <div class="gameTime"><small>{{game.date | date:'shortTime'}}</small></div>
@@ -147,7 +146,7 @@
           </td>
           <td class="team-selector">
             <div>
-              <button ng-hide="!robot && (game.awayTeam.selected || game.started || game.ended)" ng-class="{true:'btn btn-primary btn-sm', false:''}[!game.awayTeam.selected]" ng-click="selectTeam(game, 'away')"> Pick Team
+              <button ng-hide="game.awayTeam.selected" ng-class="{true:'btn btn-primary btn-sm', false:''}[!game.awayTeam.selected]" ng-click="selectTeam(game, 'away')"> Pick Team
               </button>
               <span ng-show="game.awayTeam.selected">
                 <i class="glyphicon glyphicon-ok"></i> Picked
@@ -177,7 +176,7 @@
           </td>
           <td class="team-selector">
             <div>
-              <button ng-hide="!robot && (game.homeTeam.selected || game.started || game.ended)" ng-class="{true:'btn btn-primary btn-sm', false:''}[!game.homeTeam.selected]" ng-click="selectTeam(game, 'home')"> Pick Team
+              <button ng-hide="game.homeTeam.selected" ng-class="{true:'btn btn-primary btn-sm', false:''}[!game.homeTeam.selected]" ng-click="selectTeam(game, 'home')"> Pick Team
               </button>
               <span ng-show="game.homeTeam.selected">
                 <i class="glyphicon glyphicon-ok"> Picked</i>
