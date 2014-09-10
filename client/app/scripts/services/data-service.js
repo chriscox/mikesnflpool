@@ -55,43 +55,42 @@ angular.module('clientApp')
     };
 
     var getCurrentWeek = function() {
-      return 1;
-      // var now = new Date();
-      // if (now <= new Date("9/9/2013")) {
-      //   return 1;
-      // } else if (now <= new Date("9/16/2013")) {
-      //   return 2;
-      // } else if (now <= new Date("9/23/2013")) {
-      //   return 3;
-      // } else if (now <= new Date("9/30/2013")) {
-      //   return 4;
-      // } else if (now <= new Date("10/7/2013")) {
-      //   return 5;
-      // } else if (now <= new Date("10/14/2013")) {
-      //   return 6;
-      // } else if (now <= new Date("10/21/2013")) {
-      //   return 7;
-      // } else if (now <= new Date("10/28/2013")) {
-      //   return 8;
-      // } else if (now <= new Date("11/4/2013")) {
-      //   return 9;
-      // } else if (now <= new Date("11/11/2013")) {
-      //   return 10;
-      // } else if (now <= new Date("11/18/2013")) {
-      //   return 11;
-      // } else if (now <= new Date("11/25/2013")) {
-      //   return 12;
-      // } else if (now <= new Date("12/2/2013")) {
-      //   return 13;
-      // } else if (now <= new Date("12/9/2013")) {
-      //   return 14;
-      // } else if (now <= new Date("12/16/2013")) {
-      //   return 15;
-      // } else if (now <= new Date("12/23/2013")) {
-      //   return 16;
-      // } else {
-      //   return 17;
-      // }
+      var now = new Date();
+      if (now <= new Date("9/8/2014")) {
+        return 1;
+      } else if (now <= new Date("9/15/2014")) {
+        return 2;
+      } else if (now <= new Date("9/22/2014")) {
+        return 3;
+      } else if (now <= new Date("9/29/2014")) {
+        return 4;
+      } else if (now <= new Date("10/6/2014")) {
+        return 5;
+      } else if (now <= new Date("10/13/2014")) {
+        return 6;
+      } else if (now <= new Date("10/20/2014")) {
+        return 7;
+      } else if (now <= new Date("10/27/2014")) {
+        return 8;
+      } else if (now <= new Date("11/3/2014")) {
+        return 9;
+      } else if (now <= new Date("11/10/2014")) {
+        return 10;
+      } else if (now <= new Date("11/17/2014")) {
+        return 11;
+      } else if (now <= new Date("11/24/2014")) {
+        return 12;
+      } else if (now <= new Date("12/1/2014")) {
+        return 13;
+      } else if (now <= new Date("12/8/2014")) {
+        return 14;
+      } else if (now <= new Date("12/15/2014")) {
+        return 15;
+      } else if (now <= new Date("12/22/2014")) {
+        return 16;
+      } else {
+        return 17;
+      }
     };
 
     var getActiveWeek = function() {

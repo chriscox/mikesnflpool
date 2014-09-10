@@ -65,10 +65,11 @@ angular.module('clientApp')
         $scope.games = _games;
 
         // sort by firstName then wins
-        $scope.users = _.chain(_users)
+        _users = _.chain(_users)
           .sortBy(function(u) { return u.firstName; })
           .sortBy(function(u) { return -u.wins; })
           .value();
+        $scope.users = _users;
       }
     };
 
