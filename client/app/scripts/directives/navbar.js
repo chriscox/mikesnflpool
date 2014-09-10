@@ -11,7 +11,7 @@ angular.module('clientApp')
     return {
       templateUrl: 'views/navbar.html',
       restrict: 'AE',
-      replace: true,
+      replace: false,
       link: function postLink(scope) {
 
         // scope.navItems = [

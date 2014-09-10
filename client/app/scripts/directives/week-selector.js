@@ -11,7 +11,7 @@ angular.module('clientApp')
     return {
       templateUrl: 'views/week-selector.html',
       restrict: 'AE',
-      replace: true,
+      replace: false,
       link: function postLink(scope) {
 
         scope.pool = {
