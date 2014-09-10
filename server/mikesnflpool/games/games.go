@@ -51,7 +51,7 @@ func GetGames(season int, week int, c appengine.Context) (games []Game, err erro
   var cacheKey = getCacheKey(season, week)
   if _, err := memcache.JSON.Get(c, cacheKey, &cachedGames); err != nil {
     // Not in cache, so fetch item
-    var games []Game
+    games := make([]Game, 0)
     q := datastore.NewQuery("Game").
            Filter("Season =", season).
            Filter("Week =", week).
