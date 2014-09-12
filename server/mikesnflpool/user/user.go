@@ -12,19 +12,22 @@ import (
   "net/http"
   "server/mikesnflpool/tournaments"
   "server/mikesnflpool/utils"
+  "time"
 )
 
 type User struct {
-  FirstName       string            `json:"firstName"`
-  LastName        string            `json:"lastName"`
-  Email           string            `json:"email"`
-  Password        string            `json:"password,omitempty" datastore:"-"`
-  SecurePassword  []byte            `json:",omitempty"`
-  UserKey         *datastore.Key    `json:"userKey" datastore:"-"`
-  TournamentKey   *datastore.Key    `json:"tournamentKey" datastore:"-"`
-  Admin           bool              `json:"admin,omitempty" datastore:"-"`
-  Bot             bool              `json:"bot,omitempty"`
-  BotType         string            `json:"botType,omitempty"`
+  FirstName             string            `json:"firstName"`
+  LastName              string            `json:"lastName"`
+  Email                 string            `json:"email"`
+  Password              string            `json:"password,omitempty" datastore:"-"`
+  SecurePassword        []byte            `json:",omitempty"`
+  Token                 string            `json:",omitempty"`
+  TokenExpiration       time.Time         `json:",omitempty"`
+  UserKey               *datastore.Key    `json:"userKey" datastore:"-"`
+  TournamentKey         *datastore.Key    `json:"tournamentKey" datastore:"-"`
+  Admin                 bool              `json:"admin,omitempty" datastore:"-"`
+  Bot                   bool              `json:"bot,omitempty"`
+  BotType               string            `json:"botType,omitempty"`
 }
 
 /*--- User Auth ---*/
@@ -137,20 +140,24 @@ func PasswordReset(parms martini.Params, w http.ResponseWriter, r *http.Request)
     panic(err.Error)
   }
 
-  token := createResetToken()
+  // Save token and expiration (24 hours)
+  authUser.Token = createResetToken()
+  authUser.TokenExpiration = time.Now().Add(time.Hour * 24)
+  if _, err := datastore.Put(c, authUserKey, &authUser); err != nil {
+    panic(err.Error)
+  }
+
+  // Send email with token
+  tokenUrl := "123"//createConfirmationURL(r)
   msg := &mail.Message{
-          Sender:  "Example.com Support <admin@mikesnflpool.appspotmail.com>",
+          Sender:  "MikesNFLPool <noreply@mikesnflpool.appspotmail.com>",
           To:      []string{authUser.Email},
           Subject: "Please reset your password",
-          Body:    fmt.Sprintf(confirmMessage, token),
+          Body:    fmt.Sprintf(confirmMessage,  tokenUrl),
   }
   if err := mail.Send(c, msg); err != nil {
     c.Errorf("Couldn't send email: %v", err)
   }
-
-  c.Infof("token: %v", token)
-
-
 }
 
 func createResetToken() string {
@@ -160,10 +167,13 @@ func createResetToken() string {
 }
 
 const confirmMessage = `
-Thank you for creating an account!
-Please confirm your email address by clicking on the link below:
+You're receiving this email because you requested a password reset.
 
+You can use the following link within 24 hours to reset your password:
 %s
+
+Thanks!
+MikesNFLPool
 `
 
 // func BotRegistrationHandler(w http.ResponseWriter, r *http.Request) {
