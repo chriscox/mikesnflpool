@@ -33,9 +33,10 @@ func init() {
   // m.Post("/api/botpicks", userpicks.UpdateBotPicksHandler)
   m.Get("/api/tournament/:t/season/:s/userstats", userpicks.UserStatsHandler)
 
-  // Auth
+  // Auth  
   m.Post("/api/login", user.LoginHandler)
   m.Post("/api/auth", user.UserRegistrationHandler)
+  m.Post("/api/passwordreset", user.PasswordReset)
 
   // Tournament
   m.Get("/api/season/:season/tournaments", tournaments.TournamentHandler)

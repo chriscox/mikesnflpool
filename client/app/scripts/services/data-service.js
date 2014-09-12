@@ -177,6 +177,16 @@ angular.module('clientApp')
       $cookieStore.remove('user');
     };
 
+    var passwordReset = function(email, callback, onError) {
+      Restangular.all('passwordreset').post({
+        email:email,
+      }).then(function() {
+        console.log("ok")
+      }, function(error) {
+        onError(error);
+      });
+    };
+
     var login = function(email, password, callback, onError) {
       Restangular.all('login').post({
         email:email,
@@ -430,6 +440,7 @@ angular.module('clientApp')
       register: register,
       login: login,
       logout: logout,
+      passwordReset: passwordReset,
       isAuthenticated: isAuthenticated,
       authenticatedUser: authenticatedUser,
       adminUser: adminUser,

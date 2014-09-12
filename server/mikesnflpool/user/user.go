@@ -3,8 +3,11 @@ package user
 import (
   "appengine"
   "appengine/datastore"
+  "appengine/mail"
   "bytes"
   "code.google.com/p/go.crypto/scrypt"
+  "crypto/rand"
+  "fmt"
   "github.com/go-martini/martini"
   "net/http"
   "server/mikesnflpool/tournaments"
@@ -118,6 +121,50 @@ func UserRegistrationHandler(w http.ResponseWriter, r *http.Request) {
   u.TournamentKey = tourneyKey.Parent()
   utils.ServeJson(w, &u)
 }
+
+func PasswordReset(parms martini.Params, w http.ResponseWriter, r *http.Request) {
+  c := appengine.NewContext(r)
+  var u User
+  if err := utils.ReadJson(r, &u); err != nil {
+    panic(err.Error)
+  }
+
+  // Get user
+  var authUser User
+  authUserKey := datastore.NewKey(c, "User", u.Email, 0, nil)
+  err := datastore.Get(c, authUserKey, &authUser)
+  if err != nil {
+    panic(err.Error)
+  }
+
+  token := createResetToken()
+  msg := &mail.Message{
+          Sender:  "Example.com Support <admin@mikesnflpool.appspotmail.com>",
+          To:      []string{authUser.Email},
+          Subject: "Please reset your password",
+          Body:    fmt.Sprintf(confirmMessage, token),
+  }
+  if err := mail.Send(c, msg); err != nil {
+    c.Errorf("Couldn't send email: %v", err)
+  }
+
+  c.Infof("token: %v", token)
+
+
+}
+
+func createResetToken() string {
+  b := make([]byte, 8)
+  rand.Read(b)
+  return fmt.Sprintf("%x", b)
+}
+
+const confirmMessage = `
+Thank you for creating an account!
+Please confirm your email address by clicking on the link below:
+
+%s
+`
 
 // func BotRegistrationHandler(w http.ResponseWriter, r *http.Request) {
 //   c := appengine.NewContext(r)
