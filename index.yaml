@@ -20,3 +20,8 @@ indexes:
   properties:
   - name: Season
   - name: Week
+
+- kind: User
+  properties:
+  - name: Token
+  - name: TokenExpiration

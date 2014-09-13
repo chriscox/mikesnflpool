@@ -21,7 +21,7 @@ type User struct {
   Email                 string            `json:"email"`
   Password              string            `json:"password,omitempty" datastore:"-"`
   SecurePassword        []byte            `json:",omitempty"`
-  Token                 string            `json:",omitempty"`
+  Token                 string            `json:"token,omitempty"`
   TokenExpiration       time.Time         `json:",omitempty"`
   UserKey               *datastore.Key    `json:"userKey" datastore:"-"`
   TournamentKey         *datastore.Key    `json:"tournamentKey" datastore:"-"`
@@ -125,7 +125,7 @@ func UserRegistrationHandler(w http.ResponseWriter, r *http.Request) {
   utils.ServeJson(w, &u)
 }
 
-func PasswordReset(parms martini.Params, w http.ResponseWriter, r *http.Request) {
+func PasswordForgot(w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
   var u User
   if err := utils.ReadJson(r, &u); err != nil {
@@ -148,7 +148,7 @@ func PasswordReset(parms martini.Params, w http.ResponseWriter, r *http.Request)
   }
 
   // Send email with token
-  tokenUrl := "123"//createConfirmationURL(r)
+  tokenUrl := "http://mikesnflpool.com/#/password-reset?token=" + authUser.Token
   msg := &mail.Message{
           Sender:  "MikesNFLPool <noreply@mikesnflpool.appspotmail.com>",
           To:      []string{authUser.Email},
@@ -158,6 +158,49 @@ func PasswordReset(parms martini.Params, w http.ResponseWriter, r *http.Request)
   if err := mail.Send(c, msg); err != nil {
     c.Errorf("Couldn't send email: %v", err)
   }
+}
+
+func PasswordReset(w http.ResponseWriter, r *http.Request) {
+  c := appengine.NewContext(r)
+  var u User
+  if err := utils.ReadJson(r, &u); err != nil {
+    panic(err.Error)
+  }
+
+  // Find user by token
+  q := datastore.NewQuery("User").
+      Filter("Token =", u.Token).
+      Filter("TokenExpiration >=", time.Now())
+  var userQuery []User
+  userQueryKeys, err := q.GetAll(c, &userQuery)
+  if err != nil {
+    panic(err.Error)
+  }
+  if len(userQueryKeys) != 1 {
+    w.WriteHeader(400)
+    w.Write([]byte("Something went wrong. Please try again."))
+    return
+  }
+
+  // User found, so update password.
+  var foundUser = userQuery[0]
+  var userkey = userQueryKeys[0]
+
+  // Encrypt password
+  ctext, err := Encrypt(u.Password)
+  if err != nil {
+    panic(err.Error)
+  }
+  foundUser.SecurePassword = ctext
+  foundUser.Token = ""
+
+  // Save user
+  _, err = datastore.Put(c, userkey, &foundUser)
+  if err != nil {
+    panic(err.Error)
+  }
+
+  utils.ServeJson(w, &foundUser)
 }
 
 func createResetToken() string {

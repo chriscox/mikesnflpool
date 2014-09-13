@@ -177,11 +177,22 @@ angular.module('clientApp')
       $cookieStore.remove('user');
     };
 
-    var passwordReset = function(email, callback, onError) {
-      Restangular.all('passwordreset').post({
+    var passwordForgot = function(email, callback, onError) {
+      Restangular.all('passwordforgot').post({
         email:email,
       }).then(function() {
-        console.log("ok")
+        callback();
+      }, function(error) {
+        onError(error);
+      });
+    };
+
+    var passwordReset = function(password, callback, onError) {
+      Restangular.all('passwordreset').post({
+        token:getRouteParam('token'),
+        password:password,
+      }).then(function() {
+        callback();
       }, function(error) {
         onError(error);
       });
@@ -440,6 +451,7 @@ angular.module('clientApp')
       register: register,
       login: login,
       logout: logout,
+      passwordForgot: passwordForgot,
       passwordReset: passwordReset,
       isAuthenticated: isAuthenticated,
       authenticatedUser: authenticatedUser,

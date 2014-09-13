@@ -50,6 +50,10 @@ angular
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
       })
+      .when('/password-forgot', {
+        templateUrl: 'views/password-forgot.html',
+        controller: 'PasswordForgotCtrl'
+      })
       .when('/password-reset', {
         templateUrl: 'views/password-reset.html',
         controller: 'PasswordResetCtrl'

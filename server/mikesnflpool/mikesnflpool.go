@@ -36,6 +36,7 @@ func init() {
   // Auth  
   m.Post("/api/login", user.LoginHandler)
   m.Post("/api/auth", user.UserRegistrationHandler)
+  m.Post("/api/passwordforgot", user.PasswordForgot)
   m.Post("/api/passwordreset", user.PasswordReset)
 
   // Tournament

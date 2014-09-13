@@ -84,12 +84,12 @@ angular.module('clientApp')
             return -u[i];
           });
           if (sortedUsers[0][i] > sortedUsers[1][i]) {
-            sortedUsers[0].moneyWins[i] = 15 + pot;
-            sortedUsers[0].moneyTotal += 15 + pot;
+            sortedUsers[0].moneyWins[i] = 16 + pot;
+            sortedUsers[0].moneyTotal += 16 + pot;
             pot = 0;
           } else {
             // increase pot
-            pot += 15;
+            pot += 16;
           }
         }
 
