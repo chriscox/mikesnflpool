@@ -10,7 +10,12 @@
  */
 angular.module('clientApp')
   .controller('RegisterCtrl', function ($scope, dataService) {
-    $scope.closed = true;
+    if (dataService.adminUser()) {
+      $scope.closed = false;
+    } else {
+      $scope.closed = true;
+    }
+    
     $scope.user = {
       'fields': [
         {
