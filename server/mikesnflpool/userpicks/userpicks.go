@@ -55,23 +55,23 @@ func UserStatsHandler(params martini.Params, w http.ResponseWriter, r *http.Requ
     panic(err.Error)
   }
 
-  // Save game keys to associate game data later
-  var gameKeys []*datastore.Key
-  for _, pick := range allPicks {
-    gameKeys = append(gameKeys, pick.GameKey)
+  // Get all games & keys
+  q = datastore.NewQuery("Game")
+  var allGames []games.Game
+  allGameKeys, err := q.GetAll(c, &allGames)
+  if err != nil {
+    panic(err.Error)
   }
 
-  // Get games with keys
-  var games = make([]games.Game, len(allPicks))
-  if err := datastore.GetMulti(c, gameKeys, games); err != nil {
-    panic(err.Error)
+  for i, _ := range allGames {
+    allGames[i].GameKey = allGameKeys[i]
   }
 
   // Associate game with picks
   for i, pick := range allPicks {
-    for j, key := range gameKeys {
-      if pick.GameKey.Equal(key) {
-        allPicks[i].Game = games[j]
+    for _, game := range allGames {
+      if pick.GameKey.Equal(game.GameKey) {
+        allPicks[i].Game = game
         break
       }
     }
