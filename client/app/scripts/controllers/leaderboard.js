@@ -12,6 +12,8 @@ angular.module('clientApp')
   .controller('LeaderboardCtrl', function ($scope, dataService, utils) {
 
     var _users = null;
+    var _realUsers = null; // without robots
+
     $scope.getUsers = function() {
       dataService.getUsers(function(users) {
         _users = users;
@@ -73,14 +75,15 @@ angular.module('clientApp')
 
         // determine money winners
         var pot = 0;
-        $scope.realUsers = _.filter($scope.users, function(u) {
+        _realUsers = _.filter($scope.users, function(u) {
           return !u.robot;
         });
+
         for (var i=0; i<17; i++) {
           if (i >= dataService.getCurrentWeek() - 1) {
             break;
           }
-          var sortedUsers = _.sortBy($scope.realUsers, function(u) {
+          var sortedUsers = _.sortBy(_realUsers, function(u) {
             return -u[i];
           });
           if (sortedUsers[0][i] > sortedUsers[1][i]) {
@@ -94,7 +97,7 @@ angular.module('clientApp')
         }
 
         // sort by firstName then money wins
-        $scope.realUsers = _.chain($scope.realUsers)
+        $scope.realUsers = _.chain(_realUsers)
           .sortBy(function(u) { return u.firstName; })
           .sortBy(function(u) { return -u.moneyTotal; })
           .value();
