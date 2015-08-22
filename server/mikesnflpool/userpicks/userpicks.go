@@ -34,6 +34,7 @@ type StatsMap struct {
 
 func UserStatsHandler(params martini.Params, w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
+	season, _ := strconv.Atoi(params["s"])
 	tournamentKey, err := datastore.DecodeKey(params["t"])
 	if err != nil {
 		panic(err.Error)
@@ -56,7 +57,8 @@ func UserStatsHandler(params martini.Params, w http.ResponseWriter, r *http.Requ
 	}
 
 	// Get all games & keys
-	q = datastore.NewQuery("Game")
+	q = datastore.NewQuery("Game").
+			Filter("Season =", season)
 	var allGames []games.Game
 	allGameKeys, err := q.GetAll(c, &allGames)
 	if err != nil {

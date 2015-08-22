@@ -11,7 +11,7 @@
 angular.module('clientApp')
   .service('dataService', function dataService($location, $http, Restangular, $cookieStore, $rootScope) {
 
-    var _currentSeason = 2014;
+    var _currentSeason = 2015;
     var _currentWeek = null;
 
     var _activeSeason = _currentSeason;
@@ -56,37 +56,37 @@ angular.module('clientApp')
 
     var getCurrentWeek = function() {
       var now = new Date();
-      if (now <= new Date("9/8/2014")) {
+      if (now <= new Date("9/14/2015")) {
         return 1;
-      } else if (now <= new Date("9/15/2014")) {
+      } else if (now <= new Date("9/21/2015")) {
         return 2;
-      } else if (now <= new Date("9/22/2014")) {
+      } else if (now <= new Date("9/28/2015")) {
         return 3;
-      } else if (now <= new Date("9/29/2014")) {
+      } else if (now <= new Date("10/5/2015")) {
         return 4;
-      } else if (now <= new Date("10/6/2014")) {
+      } else if (now <= new Date("10/12/2015")) {
         return 5;
-      } else if (now <= new Date("10/13/2014")) {
+      } else if (now <= new Date("10/19/2015")) {
         return 6;
-      } else if (now <= new Date("10/20/2014")) {
+      } else if (now <= new Date("10/26/2015")) {
         return 7;
-      } else if (now <= new Date("10/27/2014")) {
+      } else if (now <= new Date("11/2/2015")) {
         return 8;
-      } else if (now <= new Date("11/3/2014")) {
+      } else if (now <= new Date("11/9/2015")) {
         return 9;
-      } else if (now <= new Date("11/10/2014")) {
+      } else if (now <= new Date("11/16/2015")) {
         return 10;
-      } else if (now <= new Date("11/17/2014")) {
+      } else if (now <= new Date("11/23/2015")) {
         return 11;
-      } else if (now <= new Date("11/24/2014")) {
+      } else if (now <= new Date("11/30/2015")) {
         return 12;
-      } else if (now <= new Date("12/1/2014")) {
+      } else if (now <= new Date("12/7/2015")) {
         return 13;
-      } else if (now <= new Date("12/8/2014")) {
+      } else if (now <= new Date("12/14/2015")) {
         return 14;
-      } else if (now <= new Date("12/15/2014")) {
+      } else if (now <= new Date("12/21/2015")) {
         return 15;
-      } else if (now <= new Date("12/22/2014")) {
+      } else if (now <= new Date("12/28/2015")) {
         return 16;
       } else {
         return 17;
