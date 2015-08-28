@@ -62,7 +62,7 @@ func AddTournamentHandler(w http.ResponseWriter, r *http.Request) {
 	// Add Game Events
 	for i := 1; i < 18; i++ {
 		var gameEvent GameEvent
-		gameEvent.Season = 2014
+		gameEvent.Season = 2015
 		gameEvent.Week = i
 		key := datastore.NewIncompleteKey(c, "GameEvent", tournyKey)
 		if _, err := datastore.Put(c, key, &gameEvent); err != nil {
