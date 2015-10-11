@@ -41,6 +41,7 @@ func init() {
 
 	// Tournament
 	m.Get("/api/season/:season/tournaments", tournaments.TournamentHandler)
+	m.Get("/api/tournaments", tournaments.AllTournamentHandler)
 	m.Post("/api/tournaments", tournaments.AddTournamentHandler)
 
 	// Admin

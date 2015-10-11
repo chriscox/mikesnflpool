@@ -1,7 +1,7 @@
 <div id="admin-tournaments">
 
   <div class="page-header">
-    <h3>Admin: Tournaments</h3>
+    <h3>Admin: Tournament Players</h3>
   </div>
 
    <div class="well">
@@ -26,7 +26,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="tournament in tournaments" ng-click="test()">
+        <tr ng-repeat="player in tournamentPlayers">
+        {{player}}
           <td><div>{{$index + 1}}</div></td>
           <td><div>{{tournament.name}}</div></td>
           <td><div>{{tournament.season}}</div></td>

@@ -166,7 +166,7 @@ func AllUserPickHandler(params martini.Params, w http.ResponseWriter, r *http.Re
 	allPicks := make([]UserPick, 0)
 	q = datastore.NewQuery("UserPick").Ancestor(gameEventKeyAncestor)
 	if _, err := q.GetAll(c, &allPicks); err != nil {
-		panic(err.Error)
+		// panic(err.Error())
 	}
 
 	var gameKeys []*datastore.Key
@@ -236,7 +236,7 @@ func UserPickHandler(params martini.Params, w http.ResponseWriter, r *http.Reque
 	filteredPicks := make([]UserPick, 0)
 	q = datastore.NewQuery("UserPick").Ancestor(gameEventKeyAncestor)
 	if _, err := q.GetAll(c, &allPicks); err != nil {
-		panic(err.Error)
+		// panic(err.Error())
 	}
 	// Filter for this user
 	for _, u := range allPicks {

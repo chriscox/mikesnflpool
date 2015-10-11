@@ -201,7 +201,8 @@ angular.module('clientApp')
     var login = function(email, password, callback, onError) {
       Restangular.all('login').post({
         email:email,
-        password:password
+        password:password,
+        season:getActiveSeason()
       }).then(function(user) {
         setUserCookie(user);
         $rootScope.$broadcast('isAuthenticated', true);
@@ -423,10 +424,22 @@ angular.module('clientApp')
       });
     };
 
-    var getTournaments = function(callback) {
+    var getTournaments = function(callback, onError) {
       Restangular.one('season', getActiveSeason()).all('tournaments').getList()
       .then(function(tournaments) {
         callback(tournaments);
+      }, function(error) {
+        onError(error);
+        console.log(error)
+      });
+    };
+
+    var getAllTournaments = function(callback, onError) {
+      Restangular.all('tournaments').getList()
+      .then(function(tournaments) {
+        callback(tournaments);
+      }, function(error) {
+        onError(error);
       });
     };
 
@@ -475,7 +488,8 @@ angular.module('clientApp')
       updateGame: updateGame,
 
       addTournament: addTournament,
-      getTournaments: getTournaments
+      getTournaments: getTournaments,
+      getAllTournaments: getAllTournaments
 
     };
   });

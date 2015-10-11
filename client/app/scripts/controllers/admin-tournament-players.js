@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name clientApp.controller:AdminTournamentsCtrl
+ * @name clientApp.controller:AdminTournamentPlayersCtrl
  * @description
- * # AdminTournamentsCtrl
+ * # AdminTournamentPlayersCtrl
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('AdminTournamentsCtrl', function ($scope, dataService) {
+  .controller('AdminTournamentPlayersCtrl', function ($scope, dataService) {
 
     $scope.getAllTournaments = function() {
       dataService.getAllTournaments(function(tournaments) {
@@ -22,10 +22,6 @@ angular.module('clientApp')
       dataService.addTournament(name, season, function(tournament) {
         $scope.getAllTournaments();
       });
-    };
-
-    $scope.test = function() {
-      console.log('test')
     };
 
     $scope.getAllTournaments();

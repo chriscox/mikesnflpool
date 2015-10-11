@@ -106,6 +106,10 @@ angular
         templateUrl: 'views/admin-tournaments.html',
         controller: 'AdminTournamentsCtrl'
       })
+      .when('/admin/tournament-players', {
+        templateUrl: 'views/admin-tournament-players.html',
+        controller: 'AdminTournamentPlayersCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
