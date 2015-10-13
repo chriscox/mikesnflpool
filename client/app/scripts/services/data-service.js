@@ -324,17 +324,6 @@ angular.module('clientApp')
         });
     };
 
-    var getTeamStandings = function(teamAbbr, summarize, callback) {
-      Restangular.one('season', getActiveSeason())
-        .one('teams', teamAbbr)
-        .all('standings').getList({
-          week: (summarize) ? 17 : getActiveWeek()
-        }).then(function(standings) {
-          callback(standings);
-        }, function(error) {
-        });
-    };
-
     // Games
 
     var getGames = function(callback) {
@@ -478,7 +467,6 @@ angular.module('clientApp')
 
       getTeams: getTeams,
       getTeamSchedule: getTeamSchedule,
-      getTeamStandings: getTeamStandings,
       addTeams: addTeams,
 
       getGames: getGames,

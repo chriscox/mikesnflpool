@@ -64,6 +64,7 @@ body {
   .game-index.locked { background: url('/images/lock-icon.png') no-repeat right center; }
   .team-icon { border-right: none;}
   .team-cell { border-right: none; border-left:none; }
+  .team-cell .team-name { white-space: nowrap; }
   .team-spread { border-right: none; border-left: none; color:$redColor; min-width:40px; }
   .team-selector { width:70px; border-left:none; }
   input.radio[type="radio"]{ display:none; }

@@ -5,19 +5,19 @@ import (
 	"appengine/datastore"
 	"github.com/go-martini/martini"
 	"net/http"
-	"server/mikesnflpool/games"
 	"server/mikesnflpool/teams"
 	"server/mikesnflpool/tournaments"
 	"server/mikesnflpool/utils"
+	m "server/mikesnflpool/models"
 	"strconv"
 	"time"
 )
 
 type UserPick struct {
 	Date          time.Time      `json:"date"`
-	Game          games.Game     `json:"game" datastore:"-"`
+	Game          m.Game     `json:"game" datastore:"-"`
 	TeamKey       *datastore.Key `json:"teamKey"`
-	Team          teams.Team     `json:"team" datastore:"-"`
+	Team          m.Team     `json:"team" datastore:"-"`
 	GameKey       *datastore.Key `json:"gameKey"`
 	UserKey       *datastore.Key `json:"userKey"`
 	TournamentKey *datastore.Key `json:"tournamentKey" datastore:"-"`
@@ -59,7 +59,7 @@ func UserStatsHandler(params martini.Params, w http.ResponseWriter, r *http.Requ
 	// Get all games & keys
 	q = datastore.NewQuery("Game").
 			Filter("Season =", season)
-	var allGames []games.Game
+	var allGames []m.Game
 	allGameKeys, err := q.GetAll(c, &allGames)
 	if err != nil {
 		panic(err.Error)
@@ -98,7 +98,7 @@ func UserStatsHandler(params martini.Params, w http.ResponseWriter, r *http.Requ
 	utils.ServeJson(w, &stats)
 }
 
-func isGameWinner(game games.Game, teamKey *datastore.Key) bool {
+func isGameWinner(game m.Game, teamKey *datastore.Key) bool {
 	if game.AwayTeamScore > game.HomeTeamScore {
 		return teamKey.Equal(game.AwayTeamKey)
 	} else if game.AwayTeamScore < game.HomeTeamScore {
@@ -108,7 +108,7 @@ func isGameWinner(game games.Game, teamKey *datastore.Key) bool {
 	}
 }
 
-func isSpreadWinner(game games.Game, pick UserPick) bool {
+func isSpreadWinner(game m.Game, pick UserPick) bool {
 	if game.Ended {
 		if (float32(game.AwayTeamScore) - game.AwayTeamSpread) > (float32(game.HomeTeamScore) - game.HomeTeamSpread) {
 			if pick.TeamKey.Equal(game.AwayTeamKey) {
@@ -184,7 +184,7 @@ func AllUserPickHandler(params martini.Params, w http.ResponseWriter, r *http.Re
 	}
 
 	// Get games with keys
-	var games = make([]games.Game, len(allPicks))
+	var games = make([]m.Game, len(allPicks))
 	if err := datastore.GetMulti(c, gameKeys, games); err != nil {
 		panic(err.Error)
 	}

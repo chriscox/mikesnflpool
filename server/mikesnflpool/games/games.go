@@ -8,50 +8,20 @@ import (
 	"net/http"
 	"server/mikesnflpool/teams"
 	"server/mikesnflpool/utils"
+	m "server/mikesnflpool/models"
 	"strconv"
-	"time"
 )
-
-type Tournament struct {
-	Name string `json:"name"`
-}
-
-type GameEvent struct {
-	TournamentKey *datastore.Key `json:"tournament"`
-	Season        int            `json:"season"`
-	Week          int            `json:"week"`
-}
-
-type Game struct {
-	Season  int            `json:"season"`
-	Week    int            `json:"week"`
-	Date    time.Time      `json:"date"`
-	GameKey *datastore.Key `json:"gameKey" datastore:"-"`
-	Ended   bool           `json:"ended"`
-
-	AwayTeamKey    *datastore.Key `json:"awayTeamKey"`
-	AwayTeamAbbr   string         `json:"awayTeamAbbr" datastore:"-"`
-	AwayTeam       teams.Team     `json:"awayTeam" datastore:"-"`
-	AwayTeamScore  int            `json:"awayTeamScore"`
-	AwayTeamSpread float32        `json:"awayTeamSpread"`
-
-	HomeTeamKey    *datastore.Key `json:"homeTeamKey"`
-	HomeTeamAbbr   string         `json:"homeTeamAbbr" datastore:"-"`
-	HomeTeam       teams.Team     `json:"homeTeam" datastore:"-"`
-	HomeTeamScore  int            `json:"homeTeamScore"`
-	HomeTeamSpread float32        `json:"homeTeamSpread"`
-}
 
 func getCacheKey(season int, week int) string {
 	return "games" + strconv.Itoa(season) + strconv.Itoa(week)
 }
 
-func GetGames(season int, week int, c appengine.Context) (games []Game, err error) {
-	var cachedGames []Game
+func GetGames(season int, week int, c appengine.Context) (games []m.Game, err error) {
+	var cachedGames []m.Game
 	var cacheKey = getCacheKey(season, week)
 	if _, err := memcache.JSON.Get(c, cacheKey, &cachedGames); err != nil {
 		// Not in cache, so fetch item
-		games := make([]Game, 0)
+		games := make([]m.Game, 0)
 		q := datastore.NewQuery("Game").
 			Filter("Season =", season).
 			Filter("Week =", week).
@@ -116,7 +86,7 @@ func GameHandler(params martini.Params, w http.ResponseWriter, r *http.Request) 
 
 func AddOrUpdateGameHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	var g Game
+	var g m.Game
 	if err := utils.ReadJson(r, &g); err != nil {
 		panic(err.Error())
 	}
@@ -147,7 +117,7 @@ func AddOrUpdateGameHandler(w http.ResponseWriter, r *http.Request) {
 	memcache.Delete(c, getCacheKey(g.Season, g.Week))
 
 	// Check if existing game
-	var existingGame Game
+	var existingGame m.Game
 	err = datastore.Get(c, g.GameKey, &existingGame)
 	isNew := err != nil
 

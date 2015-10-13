@@ -23,7 +23,6 @@ func init() {
 
 	// Teams
 	m.Get("/api/teams", teams.TeamHandler)
-	m.Get("/api/season/:s/teams/:t/standings", teamstandings.TeamStandingsHandler)
 
 	// User
 	m.Get("/api/tournament/:t/users", user.UserHandler)
@@ -45,8 +44,10 @@ func init() {
 	m.Post("/api/tournaments", tournaments.AddTournamentHandler)
 
 	// Admin
-
 	m.Post("/api/teams", teams.AddTeamHandler)
+
+	// CRON
+	m.Get("/api/cron/season/:s/teamstandings", teamstandings.UpdateTeamStandingsHandler)
 
 	// CORS
 	m.Use(cors.Allow(&cors.Options{
