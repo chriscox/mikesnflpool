@@ -6,9 +6,9 @@ import (
 	"appengine/memcache"
 	"github.com/go-martini/martini"
 	"net/http"
+	m "server/mikesnflpool/models"
 	"server/mikesnflpool/teams"
 	"server/mikesnflpool/utils"
-	m "server/mikesnflpool/models"
 	"strconv"
 )
 

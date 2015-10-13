@@ -7,8 +7,8 @@ import (
 	"github.com/go-martini/martini"
 	"net/http"
 	"server/mikesnflpool/games"
-	"strconv"
 	m "server/mikesnflpool/models"
+	"strconv"
 )
 
 func getCacheKey(season int) string {

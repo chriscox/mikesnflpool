@@ -25,7 +25,6 @@ angular.module('clientApp')
 
     $scope.getGames = function() {
       dataService.getGames(function(games) {
-        console.log(games)
         $scope.games = games;
         $scope.render();
       });

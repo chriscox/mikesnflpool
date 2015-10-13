@@ -5,19 +5,19 @@ import (
 	"appengine/datastore"
 	"github.com/go-martini/martini"
 	"net/http"
+	m "server/mikesnflpool/models"
 	"server/mikesnflpool/teams"
 	"server/mikesnflpool/tournaments"
 	"server/mikesnflpool/utils"
-	m "server/mikesnflpool/models"
 	"strconv"
 	"time"
 )
 
 type UserPick struct {
 	Date          time.Time      `json:"date"`
-	Game          m.Game     `json:"game" datastore:"-"`
+	Game          m.Game         `json:"game" datastore:"-"`
 	TeamKey       *datastore.Key `json:"teamKey"`
-	Team          m.Team     `json:"team" datastore:"-"`
+	Team          m.Team         `json:"team" datastore:"-"`
 	GameKey       *datastore.Key `json:"gameKey"`
 	UserKey       *datastore.Key `json:"userKey"`
 	TournamentKey *datastore.Key `json:"tournamentKey" datastore:"-"`
@@ -58,7 +58,7 @@ func UserStatsHandler(params martini.Params, w http.ResponseWriter, r *http.Requ
 
 	// Get all games & keys
 	q = datastore.NewQuery("Game").
-			Filter("Season =", season)
+		Filter("Season =", season)
 	var allGames []m.Game
 	allGameKeys, err := q.GetAll(c, &allGames)
 	if err != nil {

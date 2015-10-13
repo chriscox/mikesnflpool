@@ -5,8 +5,8 @@ import (
 	"appengine/datastore"
 	"appengine/memcache"
 	"net/http"
-	"server/mikesnflpool/utils"
 	m "server/mikesnflpool/models"
+	"server/mikesnflpool/utils"
 	"strconv"
 )
 
@@ -64,9 +64,9 @@ func getStandings(season int, c appengine.Context) (teamStandings []m.TeamStandi
 		}
 
 		// Add to memcache
-		item := &memcache.Item {
-		   Key: cacheKey,
-		   Object: teamStandings,
+		item := &memcache.Item{
+			Key:    cacheKey,
+			Object: teamStandings,
 		}
 		err = memcache.JSON.Add(c, item)
 		return teamStandings, nil

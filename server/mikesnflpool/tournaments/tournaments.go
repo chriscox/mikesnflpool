@@ -19,7 +19,7 @@ type Tournament struct {
 type TournamentUser struct {
 	UserKey *datastore.Key `json:"userKey"`
 	Admin   bool           `json:"-"`
-	Season  int 		   `json:"season"`
+	Season  int            `json:"season"`
 }
 
 type GameEvent struct {
@@ -44,7 +44,6 @@ type User struct {
 	Bot             bool           `json:"bot,omitempty"`
 	BotType         string         `json:"botType,omitempty"`
 }
-
 
 func AllTournamentHandler(parms martini.Params, w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
