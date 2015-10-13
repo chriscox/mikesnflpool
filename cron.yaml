@@ -1,0 +1,4 @@
+cron:
+- description: daily team standings job
+  url: /api/cron/season/2015/teamstandings
+  schedule: every 15 minutes
