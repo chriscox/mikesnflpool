@@ -59,7 +59,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	// Get tournament key
 	q := datastore.NewQuery("TournamentUser").
 		Filter("UserKey =", authUserKey).
-		Filter("Season =", 2015)
+		Filter("Season =", 2016)
 	var tourneyUsers []tournaments.TournamentUser
 	tourneyUserKeys, err := q.GetAll(c, &tourneyUsers)
 	if err != nil {
@@ -111,7 +111,7 @@ func UserRegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	// Add Tournament User
 	var t tournaments.TournamentUser
 	t.UserKey = userKey
-	t.Season = 2015
+	t.Season = 2016
 	key = datastore.NewIncompleteKey(c, "TournamentUser", u.TournamentKey)
 	tourneyKey, err := datastore.Put(c, key, &t)
 	if err != nil {

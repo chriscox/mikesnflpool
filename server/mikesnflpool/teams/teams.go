@@ -18,7 +18,7 @@ func GetTeams(c appengine.Context) (teams []m.Team, err error) {
 	var cachedTeams []m.Team
 	if _, err := memcache.JSON.Get(c, "teams", &cachedTeams); err != nil {
 		// Get team standings
-		seasonStandings, err := getStandings(2015, c)
+		seasonStandings, err := getStandings(2016, c)
 		if err != nil {
 			panic(err.Error())
 		}
