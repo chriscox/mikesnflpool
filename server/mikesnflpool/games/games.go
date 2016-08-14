@@ -28,7 +28,7 @@ func GetGames(season int, week int, c appengine.Context) (games []m.Game, err er
 			Order("Date")
 		keys, err := q.GetAll(c, &games)
 		if err != nil {
-			panic(err.Error)
+			panic(err.Error())
 		}
 
 		for i, _ := range games {
@@ -57,13 +57,13 @@ func GameHandler(params martini.Params, w http.ResponseWriter, r *http.Request) 
 	// Get teams
 	teams, err := teams.GetTeams(c)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Get games
 	games, err := GetGames(season, week, c)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Associate team with game
@@ -98,7 +98,7 @@ func AddOrUpdateGameHandler(w http.ResponseWriter, r *http.Request) {
 	// Get teams
 	teams, err := teams.GetTeams(c)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Associate team with game
@@ -126,7 +126,7 @@ func AddOrUpdateGameHandler(w http.ResponseWriter, r *http.Request) {
 		key := datastore.NewIncompleteKey(c, "Game", nil)
 		gameKey, err := datastore.Put(c, key, &g)
 		if err != nil {
-			panic(err.Error)
+			panic(err.Error())
 		}
 		g.GameKey = gameKey
 		utils.ServeJson(w, &g)
@@ -138,7 +138,7 @@ func AddOrUpdateGameHandler(w http.ResponseWriter, r *http.Request) {
 		existingGame.HomeTeamSpread = g.HomeTeamSpread
 		existingGame.Ended = g.Ended
 		if _, err := datastore.Put(c, g.GameKey, &existingGame); err != nil {
-			panic(err.Error)
+			panic(err.Error())
 		}
 	}
 }
@@ -149,14 +149,14 @@ func DeleteGameHandler(params martini.Params, w http.ResponseWriter, r *http.Req
 	week, _ := strconv.Atoi(params["w"])
 	gameKey, err := datastore.DecodeKey(params["g"])
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Get user pick keys for this game
 	q := datastore.NewQuery("UserPick").Filter("GameKey =", gameKey).KeysOnly()
 	keys, err := q.GetAll(c, nil)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Clear games cache
@@ -165,6 +165,6 @@ func DeleteGameHandler(params martini.Params, w http.ResponseWriter, r *http.Req
 	// Delete keys
 	keys = append(keys, gameKey)
 	if err := datastore.DeleteMulti(c, keys); err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 }

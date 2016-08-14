@@ -53,7 +53,7 @@ func AllTournamentHandler(parms martini.Params, w http.ResponseWriter, r *http.R
 	var tournaments []Tournament
 	keys, err := q.GetAll(c, &tournaments)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Associate keys with tournament
@@ -73,7 +73,7 @@ func TournamentHandler(parms martini.Params, w http.ResponseWriter, r *http.Requ
 	var tournaments []Tournament
 	keys, err := q.GetAll(c, &tournaments)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Associate keys with tournament
@@ -96,7 +96,7 @@ func AddTournamentHandler(w http.ResponseWriter, r *http.Request) {
 	key := datastore.NewIncompleteKey(c, "Tournament", nil)
 	tournyKey, err := datastore.Put(c, key, &t)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Add Game Events
@@ -106,7 +106,7 @@ func AddTournamentHandler(w http.ResponseWriter, r *http.Request) {
 		gameEvent.Week = i
 		key := datastore.NewIncompleteKey(c, "GameEvent", tournyKey)
 		if _, err := datastore.Put(c, key, &gameEvent); err != nil {
-			panic(err.Error)
+			panic(err.Error())
 		}
 	}
 
@@ -125,7 +125,7 @@ func AddTournamentHandler(w http.ResponseWriter, r *http.Request) {
 		var tUserKey = datastore.NewIncompleteKey(c, "TournamentUser", tournyKey)
 		_, err := datastore.Put(c, tUserKey, &tu)
 		if err != nil {
-			panic(err.Error)
+			panic(err.Error())
 		}
 	}
 

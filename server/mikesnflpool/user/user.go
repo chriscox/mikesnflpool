@@ -36,7 +36,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	var u User
 	if err := utils.ReadJson(r, &u); err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Get user
@@ -44,13 +44,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	authUserKey := datastore.NewKey(c, "User", u.Email, 0, nil)
 	err := datastore.Get(c, authUserKey, &authUser)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Encrypt password and compare
 	ctext, err := Encrypt(u.Password)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 	if !bytes.Equal(ctext, authUser.SecurePassword) {
 		panic("Invalid login")
@@ -63,10 +63,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var tourneyUsers []tournaments.TournamentUser
 	tourneyUserKeys, err := q.GetAll(c, &tourneyUsers)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 	if len(tourneyUserKeys) != 1 {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// IMPORTANT: clear password
@@ -84,7 +84,7 @@ func UserRegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	var u User
 	if err := utils.ReadJson(r, &u); err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Create new user or quit if existing
@@ -98,14 +98,14 @@ func UserRegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	// Encrypt password
 	ctext, err := Encrypt(u.Password)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 	u.SecurePassword = ctext
 
 	// Save user
 	userKey, err := datastore.Put(c, key, &u)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Add Tournament User
@@ -115,7 +115,7 @@ func UserRegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	key = datastore.NewIncompleteKey(c, "TournamentUser", u.TournamentKey)
 	tourneyKey, err := datastore.Put(c, key, &t)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// IMPORTANT: clear passwords
@@ -132,7 +132,7 @@ func PasswordForgot(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	var u User
 	if err := utils.ReadJson(r, &u); err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Get user
@@ -140,14 +140,14 @@ func PasswordForgot(w http.ResponseWriter, r *http.Request) {
 	authUserKey := datastore.NewKey(c, "User", u.Email, 0, nil)
 	err := datastore.Get(c, authUserKey, &authUser)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Save token and expiration (24 hours)
 	authUser.Token = createResetToken()
 	authUser.TokenExpiration = time.Now().Add(time.Hour * 24)
 	if _, err := datastore.Put(c, authUserKey, &authUser); err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Send email with token
@@ -167,7 +167,7 @@ func PasswordReset(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	var u User
 	if err := utils.ReadJson(r, &u); err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Find user by token
@@ -177,7 +177,7 @@ func PasswordReset(w http.ResponseWriter, r *http.Request) {
 	var userQuery []User
 	userQueryKeys, err := q.GetAll(c, &userQuery)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 	if len(userQueryKeys) != 1 {
 		w.WriteHeader(400)
@@ -192,7 +192,7 @@ func PasswordReset(w http.ResponseWriter, r *http.Request) {
 	// Encrypt password
 	ctext, err := Encrypt(u.Password)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 	foundUser.SecurePassword = ctext
 	foundUser.Token = ""
@@ -200,7 +200,7 @@ func PasswordReset(w http.ResponseWriter, r *http.Request) {
 	// Save user
 	_, err = datastore.Put(c, userkey, &foundUser)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	utils.ServeJson(w, &foundUser)
@@ -226,7 +226,7 @@ MikesNFLPool
 //   c := appengine.NewContext(r)
 //   var u User
 //   if err := utils.ReadJson(r, &u); err != nil {
-//     panic(err.Error)
+//     panic(err.Error())
 //   }
 
 //   // Create new user or quit if existing
@@ -240,14 +240,14 @@ MikesNFLPool
 //   // Encrypt password
 //   ctext, err := Encrypt(u.Password)
 //   if err != nil {
-//     panic(err.Error)
+//     panic(err.Error())
 //   }
 //   u.SecurePassword = ctext
 
 //   // Save user
 //   userKey, err := datastore.Put(c, key, &u)
 //   if err != nil {
-//     panic(err.Error)
+//     panic(err.Error())
 //   }
 
 //   // Add Tournament User
@@ -256,7 +256,7 @@ MikesNFLPool
 //   key = datastore.NewIncompleteKey(c, "TournamentUser", u.TournamentKey)
 //   tourneyKey, err := datastore.Put(c, key, &t)
 //   if err != nil {
-//     panic(err.Error)
+//     panic(err.Error())
 //   }
 
 //   // IMPORTANT: clear passwords
@@ -273,7 +273,7 @@ func UserHandler(parms martini.Params, w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	tournamentKey, err := datastore.DecodeKey(parms["t"])
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Get tournament users
@@ -281,7 +281,7 @@ func UserHandler(parms martini.Params, w http.ResponseWriter, r *http.Request) {
 	var tournamentUsers []tournaments.TournamentUser
 	tournamentUserKeys, err := q.GetAll(c, &tournamentUsers)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Build array of user keys and get users
@@ -291,7 +291,7 @@ func UserHandler(parms martini.Params, w http.ResponseWriter, r *http.Request) {
 	}
 	var users = make([]User, len(userKeys))
 	if err := datastore.GetMulti(c, userKeys, users); err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Send authenticated user array

@@ -26,7 +26,7 @@ func UpdateTeamStandingsHandler(params martini.Params, w http.ResponseWriter, r 
 		var allGames []m.Game
 		allGames, err := games.GetGames(season, week, c)
 		if err != nil {
-			panic(err.Error)
+			panic(err.Error())
 		}
 
 		// Arrays for PutMulti
@@ -48,7 +48,7 @@ func UpdateTeamStandingsHandler(params martini.Params, w http.ResponseWriter, r 
 		}
 
 		if _, err := datastore.PutMulti(c, standingsKeys, standings); err != nil {
-			panic(err.Error)
+			panic(err.Error())
 		}
 	}
 }

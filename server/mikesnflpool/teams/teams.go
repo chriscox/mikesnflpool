@@ -20,7 +20,7 @@ func GetTeams(c appengine.Context) (teams []m.Team, err error) {
 		// Get team standings
 		seasonStandings, err := getStandings(2015, c)
 		if err != nil {
-			panic(err.Error)
+			panic(err.Error())
 		}
 
 		// Not in cache, so fetch item
@@ -60,7 +60,7 @@ func getStandings(season int, c appengine.Context) (teamStandings []m.TeamStandi
 		q := datastore.NewQuery("TeamStandings").Filter("Season =", season)
 		_, err := q.GetAll(c, &teamStandings)
 		if err != nil {
-			panic(err.Error)
+			panic(err.Error())
 		}
 
 		// Add to memcache
@@ -99,7 +99,7 @@ func TeamHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	teams, err := GetTeams(c)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 	utils.ServeJson(w, &teams)
 }
@@ -108,12 +108,12 @@ func AddTeamHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	var t m.Team
 	if err := utils.ReadJson(r, &t); err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	key := datastore.NewKey(c, "Team", t.Abbr, 0, nil)
 	if _, err := datastore.Put(c, key, &t); err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 	utils.ServeJson(w, &t)
 }

@@ -37,7 +37,7 @@ func UserStatsHandler(params martini.Params, w http.ResponseWriter, r *http.Requ
 	season, _ := strconv.Atoi(params["s"])
 	tournamentKey, err := datastore.DecodeKey(params["t"])
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Get tournament users
@@ -45,7 +45,7 @@ func UserStatsHandler(params martini.Params, w http.ResponseWriter, r *http.Requ
 	var tournamentUsers []tournaments.TournamentUser
 	_, err = q.GetAll(c, &tournamentUsers)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Get all userpicks
@@ -53,7 +53,7 @@ func UserStatsHandler(params martini.Params, w http.ResponseWriter, r *http.Requ
 	var allPicks []UserPick
 	_, err = q.GetAll(c, &allPicks)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Get all games & keys
@@ -62,7 +62,7 @@ func UserStatsHandler(params martini.Params, w http.ResponseWriter, r *http.Requ
 	var allGames []m.Game
 	allGameKeys, err := q.GetAll(c, &allGames)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	for i, _ := range allGames {
@@ -137,7 +137,7 @@ func AllUserPickHandler(params martini.Params, w http.ResponseWriter, r *http.Re
 	c := appengine.NewContext(r)
 	tournamentKey, err := datastore.DecodeKey(params["t"])
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 	season, _ := strconv.Atoi(params["s"])
 	week, _ := strconv.Atoi(r.URL.Query().Get("week"))
@@ -145,7 +145,7 @@ func AllUserPickHandler(params martini.Params, w http.ResponseWriter, r *http.Re
 	// Get all teams
 	teams, err := teams.GetTeams(c)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Get GameEvents ancestor for this season/week
@@ -154,7 +154,7 @@ func AllUserPickHandler(params martini.Params, w http.ResponseWriter, r *http.Re
 	var gameEventKeyAncestor *datastore.Key
 	gameEventKeys, err := q.GetAll(c, &gameEvents)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 	for i, e := range gameEvents {
 		if e.Season == season && e.Week == week {
@@ -186,7 +186,7 @@ func AllUserPickHandler(params martini.Params, w http.ResponseWriter, r *http.Re
 	// Get games with keys
 	var games = make([]m.Game, len(allPicks))
 	if err := datastore.GetMulti(c, gameKeys, games); err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Associate game with picks
@@ -208,11 +208,11 @@ func UserPickHandler(params martini.Params, w http.ResponseWriter, r *http.Reque
 	// Get params
 	tournamentKey, err := datastore.DecodeKey(params["t"])
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 	userKey, err := datastore.DecodeKey(params["u"])
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 	season, _ := strconv.Atoi(params["s"])
 	week, _ := strconv.Atoi(r.URL.Query().Get("week"))
@@ -223,7 +223,7 @@ func UserPickHandler(params martini.Params, w http.ResponseWriter, r *http.Reque
 	var gameEventKeyAncestor *datastore.Key
 	gameEventKeys, err := q.GetAll(c, &gameEvents)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 	for i, e := range gameEvents {
 		if e.Season == season && e.Week == week {
@@ -252,7 +252,7 @@ func AddUserPickHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	var p UserPick
 	if err := utils.ReadJson(r, &p); err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Set picked team
@@ -270,7 +270,7 @@ func AddUserPickHandler(w http.ResponseWriter, r *http.Request) {
 	var gameEvents []tournaments.GameEvent
 	gameEventKeys, err := q.GetAll(c, &gameEvents)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	// Get existing userpick for this game
@@ -280,7 +280,7 @@ func AddUserPickHandler(w http.ResponseWriter, r *http.Request) {
 	var existingPicks []UserPick
 	existingPicksKeys, err := q.GetAll(c, &existingPicks)
 	if err != nil {
-		panic(err.Error)
+		panic(err.Error())
 	}
 
 	if len(existingPicks) == 1 {
@@ -288,7 +288,7 @@ func AddUserPickHandler(w http.ResponseWriter, r *http.Request) {
 		existingPicks[0].TeamKey = p.TeamKey
 		existingPicks[0].Date = time.Now()
 		if _, err := datastore.Put(c, existingPicksKeys[0], &existingPicks[0]); err != nil {
-			panic(err.Error)
+			panic(err.Error())
 		}
 
 	} else {
@@ -297,7 +297,7 @@ func AddUserPickHandler(w http.ResponseWriter, r *http.Request) {
 			if e.Season == game.Season && e.Week == game.Week {
 				key := datastore.NewIncompleteKey(c, "UserPick", gameEventKeys[i])
 				if _, err := datastore.Put(c, key, &p); err != nil {
-					panic(err.Error)
+					panic(err.Error())
 				}
 				break
 			}
@@ -313,7 +313,7 @@ func AddUserPickHandler(w http.ResponseWriter, r *http.Request) {
 
 //   var p UserPick
 //   if err := utils.ReadJson(r, &p); err != nil {
-//     panic(err.Error)
+//     panic(err.Error())
 //   }
 
 //   // Set picked team
@@ -331,7 +331,7 @@ func AddUserPickHandler(w http.ResponseWriter, r *http.Request) {
 //   var gameEvents []tournaments.GameEvent
 //   gameEventKeys, err := q.GetAll(c, &gameEvents)
 //   if err != nil {
-//     panic(err.Error)
+//     panic(err.Error())
 //   }
 
 //   // Get existing userpick for this game
@@ -341,7 +341,7 @@ func AddUserPickHandler(w http.ResponseWriter, r *http.Request) {
 //   var existingPicks []UserPick
 //   existingPicksKeys, err := q.GetAll(c, &existingPicks)
 //   if err != nil {
-//     panic(err.Error)
+//     panic(err.Error())
 //   }
 
 //   if len(existingPicks) == 1 {
@@ -349,7 +349,7 @@ func AddUserPickHandler(w http.ResponseWriter, r *http.Request) {
 //     existingPicks[0].TeamKey = p.TeamKey
 //     existingPicks[0].Date = time.Now()
 //     if _, err := datastore.Put(c, existingPicksKeys[0], &existingPicks[0]); err != nil {
-//       panic(err.Error)
+//       panic(err.Error())
 //     }
 
 //   } else {
@@ -358,7 +358,7 @@ func AddUserPickHandler(w http.ResponseWriter, r *http.Request) {
 //       if e.Season == game.Season && e.Week == game.Week {
 //         key := datastore.NewIncompleteKey(c, "UserPick", gameEventKeys[i])
 //         if _, err := datastore.Put(c, key, &p); err != nil {
-//           panic(err.Error)
+//           panic(err.Error())
 //         }
 //         break
 //       }
